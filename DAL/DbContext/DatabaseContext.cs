@@ -1,7 +1,7 @@
 ﻿using DAL.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace DAL.DatabaseContext
+namespace DAL.DatabaseContextNamespace
 {
     public class DatabaseContext : DbContext
     {
@@ -17,7 +17,7 @@ namespace DAL.DatabaseContext
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Data Source=DESKTOP-CPI51I3\MSSQLSERVER01;Initial Catalog=SocialNetworkDatabase;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False");
+            optionsBuilder.UseSqlServer(@"Data Source=desktop-cpi51i3;Initial Catalog=SocialNetworkDatabase;Integrated Security=True;Encrypt=True;Trust Server Certificate=True");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -25,6 +25,8 @@ namespace DAL.DatabaseContext
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<User>().HasKey(x => x.Id);
+
+            modelBuilder.Entity<User>().HasIndex(x=>x.Email).IsUnique();
         }
     }
 }
