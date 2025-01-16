@@ -1,5 +1,8 @@
-﻿using DAL.DatabaseContextNamespace;
+﻿using BAL.DTOs;
+using DAL.DatabaseContextNamespace;
 using DAL.Entities;
+using DAL.Helpers.EntityHelpers;
+using DAL.Helpers.Interfaces;
 using DAL.Repository;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -8,20 +11,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UserDb = DAL.Entities.User;
+using UserHelperDB = DAL.Helpers.EntityHelpers.UserHelper;
 
 namespace Tests.DAL_Tests
 {
     public class UserRepositoryTests
     {
         private DatabaseContext _dbContext;
-        private CrudRepository<User> _repository;
+        private CrudRepository<UserDb> _repository;
 
         [SetUp]
         public void Setup()
         {
             var options = new DbContextOptionsBuilder<DatabaseContext>().Options;
             _dbContext = new DatabaseContext(options);
-            _repository = new CrudRepository<User>(_dbContext);
+            IEntityHelper<UserDb> helper = new UserHelperDB();
+            _repository = new CrudRepository<UserDb>(_dbContext, helper);
         }
 
         [TearDown]
@@ -40,7 +46,7 @@ namespace Tests.DAL_Tests
             int randomNumber = random.Next(1, 100001);
             string uniqueEmail = $"dimochka{randomNumber}@gmail.com";
 
-            User correctUser= new User() {Nickname="Dima", Email=uniqueEmail,Password="54u3y5u35h" };
+            UserDb correctUser= new UserDb() {Nickname="Dima", Email=uniqueEmail,Password="54u3y5u35h" };
             Assert.DoesNotThrow(() => _repository.Create(correctUser));
 
             int countUsersAfterCreating = _dbContext.Users.Count();
@@ -52,9 +58,9 @@ namespace Tests.DAL_Tests
         [Test]
         public void Test_CreateIncorrectUser()
         {
-            User userNull = new User();
-            User userNotFull = new User() { Nickname = "dddd" };
-            User userIncorrectEmail = new User() {Email="dddd",Nickname="Ahome",Password="02302408942" };
+            UserDb userNull = new UserDb();
+            UserDb userNotFull = new UserDb() { Nickname = "dddd" };
+            UserDb userIncorrectEmail = new UserDb() {Email="dddd",Nickname="Ahome",Password="02302408942" };
 
             Assert.Throws<ArgumentNullException>(() => _repository.Create(userNull));
             Assert.Throws<DbUpdateException>(() => _repository.Create(userNotFull));
@@ -69,7 +75,7 @@ namespace Tests.DAL_Tests
 
 
             var idFirstUser = _repository.GetAll().First().Id;
-            User correctUserUpdate = new User() {Email = $"tuutut{randomNumber}@gmail.com" };
+            UserDb correctUserUpdate = new UserDb() {Email = $"tuutut{randomNumber}@gmail.com" };
 
             Assert.DoesNotThrow(() => _repository.Update(idFirstUser, correctUserUpdate));
 
@@ -82,8 +88,8 @@ namespace Tests.DAL_Tests
         {
             var idFirstUser = _repository.GetAll().First().Id;
 
-            User nullUser = null;
-            User emptyUser = new User();
+            UserDb nullUser = null;
+            UserDb emptyUser = new UserDb();
 
             Assert.Throws<ArgumentNullException>(() => _repository.Update(idFirstUser, nullUser));
             Assert.Throws<ArgumentNullException>(() => _repository.Update(idFirstUser, emptyUser));

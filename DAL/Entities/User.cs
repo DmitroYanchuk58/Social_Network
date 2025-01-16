@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DAL.Entities
 {
-    public class User : Entity <User>
+    public class User : Entity
     {
         #region Properties
 
@@ -19,30 +19,5 @@ namespace DAL.Entities
         public string Email { get; set; }
 
         #endregion 
-
-        public override void CopyTo(User entityForChange)
-        {
-            if (entityForChange.Nickname != null)
-            {
-                Nickname = entityForChange.Nickname;
-            }
-            if (entityForChange.Password != null)
-            {
-                Password = entityForChange.Password;
-            }
-            if (entityForChange.Email != null)
-            {
-                Email = entityForChange.Email;
-            }
-        }
-
-        public override bool IsEmpty()
-        {
-            if(Nickname.IsNullOrEmpty() && Password.IsNullOrEmpty() && Email.IsNullOrEmpty())
-            {
-                return true;
-            }
-            return false;
-        }
     }
 }
