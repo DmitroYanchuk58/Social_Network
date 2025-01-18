@@ -1,10 +1,4 @@
-﻿using DAL.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EntityDB = DAL.Entities.Entity;
+﻿using EntityDB = DAL.Entities.Entity;
 using EntityDTO = BAL.DTOs.Entity;
 
 namespace BAL.Helpers.Interfaces

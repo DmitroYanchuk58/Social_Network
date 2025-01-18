@@ -7,10 +7,14 @@ using BAL.Helpers;
 using BAL.Helpers.Interfaces;
 using BAL.Helpers.Gmail;
 using BAL.Helpers.Convectors;
+using DAL.Helpers.Interfaces;
+using DAL.Helpers.EntityHelpers;
+using DAL.DatabaseContextNamespace;
+using BAL.Services.Interfaces;
 
 namespace BAL.Services
 {
-    public class UserService
+    public class UserService : IUserService
     {
         private CrudRepository<UserDB> _crudRepository { get; set; }
 
@@ -18,9 +22,10 @@ namespace BAL.Services
         private readonly IGmailHelper _gmailHelper;
         private readonly IConverter<UserDB, UserDto> _converter;
 
-        public UserService(CrudRepository<UserDB> crudRepository)
+        public UserService(DatabaseContext databaseContext)
         {
-            this._crudRepository = crudRepository;
+            IEntityHelper<UserDB> userHelper = new UserHelper();
+            this._crudRepository = new CrudRepository<UserDB>(databaseContext, userHelper);
             this._encryption = new AesEncryptionHelper();
             this._gmailHelper = new GmailHelper();
             this._converter = new ConverterFromDbUserToUserDto();

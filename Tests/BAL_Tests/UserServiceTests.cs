@@ -26,7 +26,7 @@ namespace Tests.BAL_Tests
             var dbContext = new DatabaseContext(options);
             IEntityHelper<UserDb> helper = new UserHelper();
             _crudRepository = new CrudRepository<UserDb>(dbContext, helper);
-            _service = new UserService(_crudRepository);
+            _service = new UserService(dbContext);
         }
 
         [Test]
@@ -53,7 +53,7 @@ namespace Tests.BAL_Tests
         [Test]
         public void Test_Register_Failure()
         {
-            Assert.Throws<ArgumentNullException>(
+            Assert.Throws<ArgumentException>(
                 () => _service.Registration(null, null, null)
             );
             Assert.Throws<ArgumentException>(
