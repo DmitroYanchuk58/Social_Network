@@ -7,6 +7,11 @@ namespace BAL.Helpers.Interfaces
     {
         public string Decrypt(string ciphertext)
         {
+            if (string.IsNullOrEmpty(ciphertext))
+            {
+                throw new ArgumentException(nameof(ciphertext));
+            }
+
             byte[] Key = Encoding.UTF8.GetBytes("Dima_Yanchuk_Key");
             byte[] IV = Encoding.UTF8.GetBytes("Social_NetworkIV");
 
@@ -25,6 +30,11 @@ namespace BAL.Helpers.Interfaces
 
         public string Encrypt(string plaintext)
         {
+            if (string.IsNullOrEmpty(plaintext))
+            {
+                throw new ArgumentException(nameof(plaintext));
+            }
+
             byte[] Key = Encoding.UTF8.GetBytes("Dima_Yanchuk_Key");
             byte[] IV = Encoding.UTF8.GetBytes("Social_NetworkIV");
 

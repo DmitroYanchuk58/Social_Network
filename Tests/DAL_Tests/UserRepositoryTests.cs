@@ -37,6 +37,7 @@ namespace Tests.DAL_Tests
         }
 
         [Test]
+        [Repeat(100)]
         public void Test_CreateCorrectUser()
         {
             int countUsersBeforeCreating = _dbContext.Users.Count();
@@ -46,7 +47,7 @@ namespace Tests.DAL_Tests
             int randomNumber = random.Next(1, 100001);
             string uniqueEmail = $"dimochka{randomNumber}@gmail.com";
 
-            UserDb correctUser= new UserDb() {Nickname="Dima", Email=uniqueEmail,Password="54u3y5u35h" };
+            UserDb correctUser= new UserDb() {Nickname = "Dima", Email = uniqueEmail,Password = $"54u3y5u35h{randomNumber}" };
             Assert.DoesNotThrow(() => _repository.Create(correctUser));
 
             int countUsersAfterCreating = _dbContext.Users.Count();

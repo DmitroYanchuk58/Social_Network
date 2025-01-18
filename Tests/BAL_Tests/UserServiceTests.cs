@@ -37,8 +37,8 @@ namespace Tests.BAL_Tests
 
             var countUsersBefore = _crudRepository.GetAll().Count();
 
-            var email = $"edeede{randomNumber}@gmail.com";
-            var password = $"pas{randomNumber}sword";
+            var email = $"jtrjryo{randomNumber}@gmail.com";
+            var password = $"6ty{randomNumber}j4yjy54{randomNumber}";
             var nickname = $"fkefee{randomNumber}kerfk";
 
             Assert.DoesNotThrow(
@@ -64,6 +64,43 @@ namespace Tests.BAL_Tests
             );
             Assert.Throws<ArgumentException>(
                 () => _service.Registration("teteete", "rwrr23", "ok546ioj5y")
+            );
+        }
+
+        [Test]
+        public void Test_Authentication_Success()
+        {
+            var email = "dima5555@gmail.com";
+            var password = "admin";
+            var isUserExist = _service.Authentication(email, password);
+
+            Assert.IsTrue(isUserExist);
+        }
+
+        [Test]
+        public void Test_Authentication_Failure()
+        {
+            var wrongPassword = "3434";
+            var wrongEmail = "1111@gmail.com";
+            var emailWithoutGmail = "rhhefg";
+            var emailEmpty = "";
+            string emailNull = null;
+            string nullPassword = null;
+
+            var isUserExist = _service.Authentication(wrongEmail, wrongPassword);
+            var isUserExist2 = _service.Authentication(emailWithoutGmail, wrongPassword);
+
+            Assert.IsFalse(isUserExist); 
+            Assert.IsFalse(isUserExist2);
+
+            Assert.Throws<ArgumentNullException>(
+                () => _service.Authentication(emailEmpty, wrongPassword)
+            );
+            Assert.Throws<ArgumentNullException>(
+                () => _service.Authentication(emailNull, wrongPassword)
+            );
+            Assert.Throws<ArgumentNullException>(
+                () => _service.Authentication(emailNull, nullPassword)
             );
         }
     }
