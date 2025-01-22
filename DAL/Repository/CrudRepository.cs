@@ -40,7 +40,7 @@ namespace DAL.Repository
                 throw new ArgumentNullException(nameof(idUpdatedEntity));
             }
 
-            originalEntity = _entityHelper.CopyTo(updatedEntity, originalEntity);
+            _entityHelper.CopyTo(updatedEntity, originalEntity);
 
             _context.SaveChanges();
         }
