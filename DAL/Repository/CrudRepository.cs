@@ -1,19 +1,13 @@
 ﻿using DAL.DatabaseContextNamespace;
 using DAL.Entities;
 using DAL.Helpers.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 
 namespace DAL.Repository
 {
     public class CrudRepository<T> where T : Entity
     {
         private readonly DatabaseContext _context;
-        private IEntityHelper<T> _entityHelper;
+        private readonly IEntityHelper<T> _entityHelper;
 
         public CrudRepository(DatabaseContext context, IEntityHelper<T> helper)
         {
