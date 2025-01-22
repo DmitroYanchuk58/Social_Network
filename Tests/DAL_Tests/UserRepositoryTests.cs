@@ -1,16 +1,7 @@
-﻿using BAL.DTOs;
-using DAL.DatabaseContextNamespace;
-using DAL.Entities;
-using DAL.Helpers.EntityHelpers;
+﻿using DAL.DatabaseContextNamespace;
 using DAL.Helpers.Interfaces;
 using DAL.Repository;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UserDb = DAL.Entities.User;
 using UserHelperDB = DAL.Helpers.EntityHelpers.UserHelper;
 
@@ -51,8 +42,8 @@ namespace Tests.DAL_Tests
 
             int countUsersAfterCreating = _dbContext.Users.Count();
 
-            Assert.IsTrue(countUsersBeforeCreating != countUsersAfterCreating);
-            Assert.IsTrue(countUsersBeforeCreating+1 == countUsersAfterCreating);
+            Assert.That(countUsersBeforeCreating, Is.LessThanOrEqualTo(countUsersAfterCreating));
+            Assert.That(countUsersBeforeCreating + 1, Is.EqualTo(countUsersAfterCreating));
         }
 
         [Test]
@@ -80,7 +71,7 @@ namespace Tests.DAL_Tests
             Assert.DoesNotThrow(() => _repository.Update(idFirstUser, correctUserUpdate));
 
             var updatedUserEmail = _repository.GetAll().First().Email;
-            Assert.IsTrue(String.Equals(correctUserUpdate.Email, updatedUserEmail));
+            Assert.That(correctUserUpdate.Email, Is.EqualTo(updatedUserEmail));
         }
 
         [Test]
@@ -99,13 +90,13 @@ namespace Tests.DAL_Tests
         public void Test_DeleteSuccess()
         {
             var idDeleteUser = _repository.GetAll().Last().Id;
-            var countUsersBefore = _repository.GetAll().Count();
+            var countUsersBefore = _repository.GetAll().Count;
 
             Assert.DoesNotThrow(() => _repository.Delete(idDeleteUser));
 
-            var countUsersAfter = _repository.GetAll().Count();
+            var countUsersAfter = _repository.GetAll().Count;
 
-            Assert.IsTrue(countUsersBefore - 1 == countUsersAfter);
+            Assert.That(countUsersBefore - 1, Is.EqualTo(countUsersAfter));
         }
 
         [Test]
@@ -125,8 +116,8 @@ namespace Tests.DAL_Tests
             var foundUser = _repository.Get(idFirstUser);
 
             Assert.IsNotNull(foundUser);
-            Assert.IsTrue(firstUser.Email == foundUser.Email &&
-                firstUser.Password == foundUser.Password);
+            Assert.That(firstUser.Email, Is.EqualTo(foundUser.Email));
+            Assert.That(firstUser.Password, Is.EqualTo(foundUser.Password));
         }
 
         [Test]
