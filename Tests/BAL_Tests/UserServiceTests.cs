@@ -70,7 +70,7 @@ namespace Tests.BAL_Tests
         [Test]
         public void Test_Authentication_Success()
         {
-            var email = "dima5555@gmail.com";
+            var email = "dima555588@gmail.com";
             var password = "admin";
             var isUserExist = _service.Authentication(email, password);
 

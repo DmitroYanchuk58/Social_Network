@@ -37,7 +37,7 @@ namespace BAL.Services
 
             if (!this._gmailHelper.IsGmail(email))
             {
-                throw new ArgumentException(nameof(email));
+                throw new ArgumentException("Email should has @gmail.com",nameof(email));
             }
 
             UserDto userDto = new UserDto() 
@@ -66,8 +66,8 @@ namespace BAL.Services
 
             var users = _crudRepository.GetAll();
 
-            var ifUserExist = users.Where(user => String.Equals(email, user.Email) 
-            && String.Equals(password, this._encryption.Decrypt(user.Password))).Any();
+            var ifUserExist = users.Any(user => String.Equals(email, user.Email) 
+            && String.Equals(password, this._encryption.Decrypt(user.Password)));
 
             return ifUserExist;
         }
