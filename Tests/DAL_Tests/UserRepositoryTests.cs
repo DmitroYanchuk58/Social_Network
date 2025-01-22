@@ -59,9 +59,9 @@ namespace Tests.DAL_Tests
         [Test]
         public void Test_CreateIncorrectUser()
         {
-            UserDb userNull = new UserDb();
-            UserDb userNotFull = new UserDb() { Nickname = "dddd" };
-            UserDb userIncorrectEmail = new UserDb() {Email="dddd",Nickname="Ahome",Password="02302408942" };
+            UserDb userNull = new UserDb() { Nickname=null, Email=null, Password=null };
+            UserDb userNotFull = new UserDb() { Nickname = "dddd", Email=null, Password=null };
+            UserDb userIncorrectEmail = new UserDb() { Email="dddd",Nickname="Ahome",Password="02302408942" };
 
             Assert.Throws<ArgumentNullException>(() => _repository.Create(userNull));
             Assert.Throws<DbUpdateException>(() => _repository.Create(userNotFull));
@@ -76,7 +76,7 @@ namespace Tests.DAL_Tests
 
 
             var idFirstUser = _repository.GetAll().First().Id;
-            UserDb correctUserUpdate = new UserDb() {Email = $"tuutut{randomNumber}@gmail.com" };
+            UserDb correctUserUpdate = new UserDb() {Email = $"tuutut{randomNumber}@gmail.com", Nickname=null, Password=null };
 
             Assert.DoesNotThrow(() => _repository.Update(idFirstUser, correctUserUpdate));
 
@@ -90,7 +90,7 @@ namespace Tests.DAL_Tests
             var idFirstUser = _repository.GetAll().First().Id;
 
             UserDb nullUser = null;
-            UserDb emptyUser = new UserDb();
+            UserDb emptyUser = new UserDb() { Nickname=null, Email=null, Password = null };
 
             Assert.Throws<ArgumentNullException>(() => _repository.Update(idFirstUser, nullUser));
             Assert.Throws<ArgumentNullException>(() => _repository.Update(idFirstUser, emptyUser));
