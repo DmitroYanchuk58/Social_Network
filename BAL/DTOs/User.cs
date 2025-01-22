@@ -2,11 +2,11 @@
 {
     public class User : Entity
     {
-        private string nickname;
+        private string? nickname;
 
-        private string password;
+        private string? password;
 
-        private string email;
+        private string? email;
 
         public string Nickname
         {
