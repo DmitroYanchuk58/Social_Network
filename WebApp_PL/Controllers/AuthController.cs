@@ -1,6 +1,12 @@
 ﻿using BAL.Services;
 using BAL.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using WebApp_PL.Helpers;
+using WebApp_PL.Helpers.TokenGenerators;
 
 namespace WebApp_PL.Controllers
 {
@@ -9,9 +15,12 @@ namespace WebApp_PL.Controllers
     public class AuthController : Controller
     {
         IUserService _service;
+        ITokenGenerator _tokenGenerator;
+
         public AuthController(IUserService service)
         {
             _service = service;
+            this._tokenGenerator = new JwtTokenGenerator();
         }
 
         [HttpGet]
@@ -20,7 +29,8 @@ namespace WebApp_PL.Controllers
             var isAuthenticated = _service.Authentication(email, password);
             if (isAuthenticated)
             {
-                return Ok(new { Message = "Login successful" });
+                var token = _tokenGenerator.GenerateToken(email);
+                return Ok(new { token });
             }
             return Unauthorized(new { Message = "Invalid credentials" });
         }
@@ -31,7 +41,8 @@ namespace WebApp_PL.Controllers
             try
             {
                 _service.Registration(email, password, nickname);
-                return Ok(new { Message = "Registration successful" });
+                var token = _tokenGenerator.GenerateToken(email);
+                return Ok(new { token });
             }
             catch (Exception ex)
             {
