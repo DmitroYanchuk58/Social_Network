@@ -1,14 +1,8 @@
-﻿using BAL.Helpers;
-using BAL.Services;
+﻿using BAL.Services;
 using DAL.DatabaseContextNamespace;
 using DAL.Helpers.Interfaces;
 using DAL.Repository;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UserDb = DAL.Entities.User;
 using UserHelper = DAL.Helpers.EntityHelpers.UserHelper;
 
@@ -35,7 +29,7 @@ namespace Tests.BAL_Tests
             Random random = new Random();
             int randomNumber = random.Next(1, 100001);
 
-            var countUsersBefore = _crudRepository.GetAll().Count();
+            var countUsersBefore = _crudRepository.GetAll().Count;
 
             var email = $"jtrjryo{randomNumber}@gmail.com";
             var password = $"6ty{randomNumber}j4yjy54{randomNumber}";
@@ -45,9 +39,9 @@ namespace Tests.BAL_Tests
                 () => _service.Registration(email, password, nickname)
             );
 
-            var countUsersAfter = _crudRepository.GetAll().Count();
+            var countUsersAfter = _crudRepository.GetAll().Count;
 
-            Assert.IsTrue(countUsersBefore == countUsersAfter - 1);
+            Assert.That(countUsersAfter - 1, Is.EqualTo(countUsersBefore));
         }
 
         [Test]
@@ -74,7 +68,7 @@ namespace Tests.BAL_Tests
             var password = "admin";
             var isUserExist = _service.Authentication(email, password);
 
-            Assert.IsTrue(isUserExist);
+            Assert.That(isUserExist, Is.EqualTo(true));
         }
 
         [Test]
@@ -90,8 +84,8 @@ namespace Tests.BAL_Tests
             var isUserExist = _service.Authentication(wrongEmail, wrongPassword);
             var isUserExist2 = _service.Authentication(emailWithoutGmail, wrongPassword);
 
-            Assert.IsFalse(isUserExist); 
-            Assert.IsFalse(isUserExist2);
+            Assert.That(isUserExist, Is.EqualTo(false));
+            Assert.That(isUserExist2, Is.EqualTo(false));
 
             Assert.Throws<ArgumentNullException>(
                 () => _service.Authentication(emailEmpty, wrongPassword)
