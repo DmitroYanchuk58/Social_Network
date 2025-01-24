@@ -1,6 +1,6 @@
 ﻿namespace BAL.DTOs
 {
-    public class Entity
+    public interface IEntity
     {
     }
 }

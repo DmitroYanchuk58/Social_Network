@@ -9,14 +9,14 @@ namespace DAL.Entities
         #region Properties
 
         [Required]
-        public string Nickname {  get; set; }
+        public required string Nickname {  get; set; }
 
         [Required]
-        public string Password { get; set; }
+        public required string Password { get; set; }
 
         [Required]
         [EmailAddress]
-        public string Email { get; set; }
+        public required string Email { get; set; }
 
         #endregion 
     }

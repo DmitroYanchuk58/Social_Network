@@ -1,5 +1,5 @@
 ﻿using EntityDB = DAL.Entities.Entity;
-using EntityDTO = BAL.DTOs.Entity;
+using EntityDTO = BAL.DTOs.IEntity;
 
 namespace BAL.Helpers.Interfaces
 {

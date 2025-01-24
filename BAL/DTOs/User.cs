@@ -1,6 +1,6 @@
 ﻿namespace BAL.DTOs
 {
-    public class User : Entity
+    public class User : IEntity
     {
         private string nickname;
 
