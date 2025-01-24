@@ -39,7 +39,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddAuthorization();
 
 //Custom services
-builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserService, AuthService>();
 
 var app = builder.Build();
 

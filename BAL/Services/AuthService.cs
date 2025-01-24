@@ -1,6 +1,4 @@
-﻿using BAL.DTOs;
-using DAL.Entities;
-using DAL.Repository;
+﻿using DAL.Repository;
 using UserDB = DAL.Entities.User;
 using UserDto = BAL.DTOs.User;
 using BAL.Helpers;
@@ -14,7 +12,7 @@ using BAL.Services.Interfaces;
 
 namespace BAL.Services
 {
-    public class UserService : IUserService
+    public class AuthService : IUserService
     {
         private CrudRepository<UserDB> _crudRepository { get; set; }
 
@@ -22,7 +20,7 @@ namespace BAL.Services
         private readonly IGmailHelper _gmailHelper;
         private readonly IConverter<UserDB, UserDto> _converter;
 
-        public UserService(DatabaseContext databaseContext)
+        public AuthService(DatabaseContext databaseContext)
         {
             IEntityHelper<UserDB> userHelper = new UserHelper();
             this._crudRepository = new CrudRepository<UserDB>(databaseContext, userHelper);

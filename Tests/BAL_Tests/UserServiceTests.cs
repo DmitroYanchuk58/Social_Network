@@ -17,7 +17,7 @@ namespace Tests.BAL_Tests
     public class UserServiceTests
     {
         private CrudRepository<UserDb> _crudRepository;
-        private UserService _service;
+        private AuthService _service;
 
         [SetUp]
         public void Setup()
@@ -26,7 +26,7 @@ namespace Tests.BAL_Tests
             var dbContext = new DatabaseContext(options);
             IEntityHelper<UserDb> helper = new UserHelper();
             _crudRepository = new CrudRepository<UserDb>(dbContext, helper);
-            _service = new UserService(dbContext);
+            _service = new AuthService(dbContext);
         }
 
         [Test]
@@ -70,7 +70,7 @@ namespace Tests.BAL_Tests
         [Test]
         public void Test_Authentication_Success()
         {
-            var email = "toyiu@gmail.com";
+            var email = "dima5555@gmail.com";
             var password = "admin";
             var isUserExist = _service.Authentication(email, password);
 
