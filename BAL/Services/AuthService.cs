@@ -1,7 +1,6 @@
 ﻿using DAL.Repository;
 using UserDB = DAL.Entities.User;
 using UserDto = BAL.DTOs.User;
-using BAL.Helpers;
 using BAL.Helpers.Interfaces;
 using BAL.Helpers.Gmail;
 using BAL.Helpers.Convectors;
@@ -18,7 +17,7 @@ namespace BAL.Services
 
         private readonly IEncryption _encryption;
         private readonly IGmailHelper _gmailHelper;
-        private readonly IConverter<UserDB, UserDto> _converter;
+        private readonly IConverterFromDtoToDb<UserDB, UserDto> _converter;
 
         public AuthService(DatabaseContext databaseContext)
         {
@@ -26,7 +25,7 @@ namespace BAL.Services
             this._crudRepository = new CrudRepository<UserDB>(databaseContext, userHelper);
             this._encryption = new AesEncryptionHelper();
             this._gmailHelper = new GmailHelper();
-            this._converter = new ConverterFromDbUserToUserDto();
+            this._converter = new ConverterFromUserDtoToUserDb();
         }
 
         public void Registration(string email, string password, string nickname)
