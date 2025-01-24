@@ -1,6 +1,6 @@
 ﻿namespace BAL.Services.Interfaces
 {
-    public interface IUserService
+    public interface IAuthService
     {
         public void Registration(string email, string password, string nickname);
 

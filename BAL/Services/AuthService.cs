@@ -12,7 +12,7 @@ using BAL.Services.Interfaces;
 
 namespace BAL.Services
 {
-    public class AuthService : IUserService
+    public class AuthService : IAuthService
     {
         private CrudRepository<UserDB> _crudRepository { get; set; }
 

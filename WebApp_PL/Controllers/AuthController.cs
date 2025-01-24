@@ -14,10 +14,10 @@ namespace WebApp_PL.Controllers
     [Route("[controller]")]
     public class AuthController : Controller
     {
-        IUserService _service;
+        IAuthService _service;
         ITokenGenerator _tokenGenerator;
 
-        public AuthController(IUserService service)
+        public AuthController(IAuthService service)
         {
             _service = service;
             this._tokenGenerator = new JwtTokenGenerator();
