@@ -88,12 +88,17 @@ namespace Tests.DAL_Tests
         public void Test_UpdateFailure()
         {
             var idFirstUser = _repository.GetAll().First().Id;
+            var firstUser = _repository.GetAll()[0];
 
             UserDb nullUser = null;
             UserDb emptyUser = new UserDb() { Nickname=null, Email=null, Password = null };
 
             Assert.Throws<ArgumentNullException>(() => _repository.Update(idFirstUser, nullUser));
             Assert.Throws<ArgumentNullException>(() => _repository.Update(idFirstUser, emptyUser));
+
+            Assert.Throws<ArgumentException>(
+                () => _repository.Update(Guid.NewGuid(), firstUser)
+            );
         }
 
         [Test] 

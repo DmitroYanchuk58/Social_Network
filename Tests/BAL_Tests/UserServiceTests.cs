@@ -3,6 +3,7 @@ using BAL.Helpers.Convectors;
 using BAL.Helpers.Interfaces;
 using BAL.Services;
 using DAL.DatabaseContextNamespace;
+using DAL.Entities;
 using DAL.Helpers.EntityHelpers;
 using DAL.Helpers.Interfaces;
 using DAL.Repository;
@@ -76,6 +77,52 @@ namespace Tests.BAL_Tests
             var userDto = this._converterFromDbToDto.Convert(userDb);
             Assert.DoesNotThrow(
                 () => this._service.UpdateUser(userDb.Id, userDto)
+            );
+        }
+
+        [Test]
+        public void Test_UpdateUser_Failure_NullData()
+        {
+            var userDb = _crudRepository.GetAll()[2];
+            Assert.Throws<ArgumentNullException>(
+                () => this._service.UpdateUser(userDb.Id, null)
+            );
+        }
+
+        [Test]
+        public void Test_UpdateUser_Failure_RandomId()
+        {
+            var userDb = _crudRepository.GetAll()[2];
+            var userDto = this._converterFromDbToDto.Convert(userDb);
+            Assert.Throws<ArgumentException>(
+                () => this._service.UpdateUser(Guid.NewGuid(), userDto)
+            );
+        }
+
+        [Test]
+        public void Test_DeleteUser_Success()
+        {
+            var userForDelete = _crudRepository.GetAll().Last();
+            Assert.DoesNotThrow(
+                () => _service.DeleteUser(userForDelete.Id)
+            );
+        }
+
+        [Test]
+        public void Test_DeleteUser_Success_Count()
+        {
+            var countUsersBefore = _crudRepository.GetAll().Count();
+            var userForDelete = _crudRepository.GetAll().Last();
+            _service.DeleteUser(userForDelete.Id);
+            var countUsersAfter = _crudRepository.GetAll().Count();
+            Assert.That(countUsersBefore - 1 == countUsersAfter);
+        }
+
+        [Test]
+        public void Test_DeleteUser_Failure()
+        {
+            Assert.Throws<ArgumentException>(
+                () => _service.DeleteUser(Guid.NewGuid())
             );
         }
     }
