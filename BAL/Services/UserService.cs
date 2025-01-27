@@ -15,7 +15,6 @@ namespace BAL.Services
     {
         private CrudRepository<UserDB> _crudRepository { get; set; }
 
-        private readonly IEncryption _encryption;
         private readonly IGmailHelper _gmailHelper;
         private readonly IConverterFromDbToDto<UserDB, UserDto> _converterToDto;
         private readonly IConverterFromDtoToDb<UserDB, UserDto> _converterToDb;
@@ -23,7 +22,6 @@ namespace BAL.Services
         {
             IEntityHelper<UserDB> userHelper = new UserHelper();
             this._crudRepository = new CrudRepository<UserDB>(databaseContext, userHelper);
-            this._encryption = new AesEncryptionHelper();
             this._gmailHelper = new GmailHelper();
             this._converterToDto = new ConverterFromUserDbToUserDto();
             this._converterToDb = new ConverterFromUserDtoToUserDb();

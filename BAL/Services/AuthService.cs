@@ -15,7 +15,6 @@ namespace BAL.Services
     {
         private CrudRepository<UserDB> _crudRepository { get; set; }
 
-        private readonly IEncryption _encryption;
         private readonly IGmailHelper _gmailHelper;
         private readonly IConverterFromDtoToDb<UserDB, UserDto> _converter;
 
@@ -23,14 +22,13 @@ namespace BAL.Services
         {
             IEntityHelper<UserDB> userHelper = new UserHelper();
             this._crudRepository = new CrudRepository<UserDB>(databaseContext, userHelper);
-            this._encryption = new AesEncryptionHelper();
             this._gmailHelper = new GmailHelper();
             this._converter = new ConverterFromUserDtoToUserDb();
         }
 
         public void Registration(string email, string password, string nickname)
         {
-            var encryptedPassword = this._encryption.Encrypt(password);
+            var encryptedPassword = AesEncryptor.Encrypt(password);
 
             if (!this._gmailHelper.IsGmail(email))
             {
@@ -64,7 +62,7 @@ namespace BAL.Services
             var users = _crudRepository.GetAll();
 
             var ifUserExist = users.Where(user => String.Equals(email, user.Email) 
-            && String.Equals(password, this._encryption.Decrypt(user.Password))).Any();
+            && String.Equals(password, AesEncryptor.Decrypt(user.Password))).Any();
 
             return ifUserExist;
         }

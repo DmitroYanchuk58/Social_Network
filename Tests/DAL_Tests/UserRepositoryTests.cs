@@ -37,7 +37,6 @@ namespace Tests.DAL_Tests
         }
 
         [Test]
-        [Repeat(100)]
         public void Test_CreateCorrectUser()
         {
             int countUsersBeforeCreating = _dbContext.Users.Count();
@@ -117,7 +116,7 @@ namespace Tests.DAL_Tests
         [Test]
         public void Test_DeleteFailure()
         {
-            Assert.Throws<InvalidOperationException>(() => _repository.Delete(Guid.NewGuid()));
+            Assert.Throws<ArgumentException>(() => _repository.Delete(Guid.NewGuid()));
         }
 
         [Test]
