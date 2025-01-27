@@ -50,5 +50,22 @@ namespace BAL.Services
             var userDb = this._converterToDb.Convert(userDto);
             this._crudRepository.Update(id, userDb);
         }
+
+        public void ChangeNickname(Guid id, string newNickname)
+        {
+            if (string.IsNullOrWhiteSpace(newNickname))
+            {
+                throw new ArgumentNullException(nameof(newNickname));
+            }
+
+            var user = new UserDB()
+            {
+                Nickname = newNickname,
+                Password = null,
+                Email = null
+            };
+
+            _crudRepository.Update(id, user);
+        }
     }
 }
