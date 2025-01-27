@@ -15,14 +15,12 @@ namespace BAL.Services
     {
         private CrudRepository<UserDB> _crudRepository { get; set; }
 
-        private readonly IGmailHelper _gmailHelper;
         private readonly IConverterFromDtoToDb<UserDB, UserDto> _converter;
 
         public AuthService(DatabaseContext databaseContext)
         {
             IEntityHelper<UserDB> userHelper = new UserHelper();
             this._crudRepository = new CrudRepository<UserDB>(databaseContext, userHelper);
-            this._gmailHelper = new GmailHelper();
             this._converter = new ConverterFromUserDtoToUserDb();
         }
 
@@ -30,7 +28,7 @@ namespace BAL.Services
         {
             var encryptedPassword = AesEncryptor.Encrypt(password);
 
-            if (!this._gmailHelper.IsGmail(email))
+            if (!IsGmailChecker.IsGmail(email))
             {
                 throw new ArgumentException(nameof(email));
             }

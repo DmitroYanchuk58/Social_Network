@@ -15,14 +15,12 @@ namespace BAL.Services
     {
         private CrudRepository<UserDB> _crudRepository { get; set; }
 
-        private readonly IGmailHelper _gmailHelper;
         private readonly IConverterFromDbToDto<UserDB, UserDto> _converterToDto;
         private readonly IConverterFromDtoToDb<UserDB, UserDto> _converterToDb;
         public UserService(DatabaseContext databaseContext)
         {
             IEntityHelper<UserDB> userHelper = new UserHelper();
             this._crudRepository = new CrudRepository<UserDB>(databaseContext, userHelper);
-            this._gmailHelper = new GmailHelper();
             this._converterToDto = new ConverterFromUserDbToUserDto();
             this._converterToDb = new ConverterFromUserDtoToUserDb();
         }
