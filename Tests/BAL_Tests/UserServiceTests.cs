@@ -125,5 +125,42 @@ namespace Tests.BAL_Tests
                 () => _service.DeleteUser(Guid.NewGuid())
             );
         }
+
+        [Test]
+        public void ChangeNickname_DoesNotThrow()
+        {
+            var id = _crudRepository.GetAll()[27].Id;
+            Assert.DoesNotThrow(
+                () => _service.ChangeNickname(id, "Aragorn son of Aratorn")
+            );
+        }
+
+        [Test]
+        public void ChangeNickname_NicknameAfterUpdateSame()
+        {
+            var id = _crudRepository.GetAll()[78].Id;
+            var newNickname = "Aragorn";
+            _service.ChangeNickname(id, newNickname);
+            var nicknameAfterUpdate = _crudRepository.GetAll()[78].Nickname;
+            Assert.That(newNickname == nicknameAfterUpdate);
+        }
+
+        [Test]
+        public void ChangeNickname_RandomId()
+        {
+            var id = Guid.NewGuid();
+            Assert.Throws<ArgumentException>(
+                () => _service.ChangeNickname(id, "Legolas")
+            );
+        }
+
+        [Test]  
+        public void ChangeNickname_NullNickname()
+        {
+            var id = _crudRepository.GetAll()[3].Id;
+            Assert.Throws<ArgumentNullException>(
+                () => _service.ChangeNickname(id, null)
+            );
+        }
     }
 }
