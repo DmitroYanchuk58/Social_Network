@@ -45,12 +45,6 @@ namespace BAL.Services
             this._crudRepository.Delete(id);
         }
 
-        public void UpdateUser(Guid id, UserDto userDto)
-        {
-            var userDb = this._converterToDb.Convert(userDto);
-            this._crudRepository.Update(id, userDb);
-        }
-
         public void ChangeNickname(Guid id, string newNickname)
         {
             if (string.IsNullOrWhiteSpace(newNickname))
@@ -62,6 +56,25 @@ namespace BAL.Services
             {
                 Nickname = newNickname,
                 Password = null,
+                Email = null
+            };
+
+            _crudRepository.Update(id, user);
+        }
+
+        public void ChangePassword(Guid id, string newPassword)
+        {
+            if (string.IsNullOrWhiteSpace(newPassword))
+            {
+                throw new ArgumentNullException(nameof(newPassword));
+            }
+
+            newPassword = AesEncryptor.Encrypt(newPassword);
+
+            var user = new UserDB()
+            {
+                Nickname = null,
+                Password = newPassword,
                 Email = null
             };
 

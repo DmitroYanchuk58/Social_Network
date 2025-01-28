@@ -60,46 +60,6 @@ namespace Tests.BAL_Tests
         }
 
         [Test]
-        public void Test_UpdateUser_Success_SameNameAfterUpdate()
-        {
-            var userDbBeforeUpdate = _crudRepository.GetAll()[0];
-            var userDto = this._converterFromDbToDto.Convert(userDbBeforeUpdate);
-            userDto.Nickname = "First User";
-            this._service.UpdateUser(userDbBeforeUpdate.Id, userDto);
-            var userDbAfterUpdate = _crudRepository.GetAll()[0];
-            Assert.That(userDbAfterUpdate.Nickname == userDto.Nickname, Is.EqualTo(true));
-        }
-
-        [Test]
-        public void Test_UpdateUser_Success_DoesNotThrow()
-        {
-            var userDb = _crudRepository.GetAll()[2];
-            var userDto = this._converterFromDbToDto.Convert(userDb);
-            Assert.DoesNotThrow(
-                () => this._service.UpdateUser(userDb.Id, userDto)
-            );
-        }
-
-        [Test]
-        public void Test_UpdateUser_Failure_NullData()
-        {
-            var userDb = _crudRepository.GetAll()[2];
-            Assert.Throws<ArgumentNullException>(
-                () => this._service.UpdateUser(userDb.Id, null)
-            );
-        }
-
-        [Test]
-        public void Test_UpdateUser_Failure_RandomId()
-        {
-            var userDb = _crudRepository.GetAll()[2];
-            var userDto = this._converterFromDbToDto.Convert(userDb);
-            Assert.Throws<ArgumentException>(
-                () => this._service.UpdateUser(Guid.NewGuid(), userDto)
-            );
-        }
-
-        [Test]
         public void Test_DeleteUser_Success()
         {
             var userForDelete = _crudRepository.GetAll().Last();
@@ -161,6 +121,44 @@ namespace Tests.BAL_Tests
             Assert.Throws<ArgumentNullException>(
                 () => _service.ChangeNickname(id, null)
             );
+        }
+
+        [Test]
+        public void ChangePassword_NullPassword()
+        {
+            var id = _crudRepository.GetAll()[3].Id;
+            Assert.Throws<ArgumentNullException>(
+                () => _service.ChangePassword(id, null)
+            );
+        }
+
+        [Test]
+        public void ChangePassword_RandomId()
+        {
+            var id = Guid.NewGuid();
+            Assert.Throws<ArgumentException>(
+                () => _service.ChangeNickname(id, "NEwPassword")
+            );
+        }
+
+        [Test]
+        public void ChangePassword_DoesNotThrow()
+        {
+            var id = _crudRepository.GetAll()[27].Id;
+            Assert.DoesNotThrow(
+                () => _service.ChangeNickname(id, "Different password")
+            );
+        }
+
+        [Test]
+        public void ChangePassword_NicknameAfterUpdateSame()
+        {
+            var id = _crudRepository.GetAll()[78].Id;
+            var newPassword = "Hehehehe";
+            _service.ChangePassword(id, newPassword);
+            var passwordAfterUpdate = _crudRepository.GetAll()[78].Password;
+            passwordAfterUpdate = AesEncryptor.Decrypt(passwordAfterUpdate);
+            Assert.That(newPassword == passwordAfterUpdate);
         }
     }
 }

@@ -8,6 +8,8 @@ namespace BAL.Services.Interfaces
 
         public void DeleteUser(Guid id);
 
-        public void UpdateUser(Guid id, User user);
+        public void ChangePassword(Guid id, string newPassword);
+
+        public void ChangeNickname(Guid id, string newNickname);
     }
 }
