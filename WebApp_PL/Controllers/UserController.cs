@@ -17,44 +17,53 @@ namespace WebApp_PL.Controllers
             _service = service;
         }
 
-        ////[Authorize]
-        //[HttpPost("EditAccount")]
-        //public IActionResult EditAccount(User user)
-        //{
-        //    _service.UpdateUser(user.Id, user);
-        //    return Ok();
-        //}
+        [Authorize]
+        [HttpPost("ChangeName")]
+        public IActionResult ChangeNickname(Guid id, string newNickname)
+        {
+            if (string.IsNullOrEmpty(newNickname))
+            {
+                throw new ArgumentNullException(nameof(newNickname));
+            }
+            _service.ChangeNickname(id, newNickname);
+            return Ok();
+        }
 
-        //[HttpPost("ChangeName")]
-        //public IActionResult ChangeNickname(Guid id, string newNickname)
-        //{
-        //    User user = _service.GetUser(id);
-        //    user.Nickname = newNickname;
-        //    _service.UpdateUser(id, user);
-        //    return Ok();
-        //}
+        [Authorize]
+        [HttpPost("ChangePassword")]
+        public IActionResult ChangePassword(Guid id, string newPassword)
+        {
+            if (string.IsNullOrEmpty(newPassword))
+            {
+                throw new ArgumentNullException(nameof(newPassword));
+            }
+            _service.ChangePassword(id, newPassword);
+            return Ok();
+        }
 
-        //[HttpGet("GetAccount")]
-        //public IActionResult GetAccount(Guid id)
-        //{
-        //    var user = _service.GetUser(id);
-        //    return Ok(user);
-        //}
+        [HttpGet("GetAccount")]
+        public IActionResult GetAccount(Guid id)
+        {
+            var user = _service.GetUser(id);
+            return Ok(user);
+        }
 
-        //[Authorize]
-        //[HttpGet("MyAccount")]
-        //public IActionResult MyAccount(Guid id)
-        //{
-        //    var user = _service.GetUser(id);
-        //    return Ok(user);
-        //}
+        [Authorize]
+        [HttpGet("MyAccount")]
+        public IActionResult MyAccount(Guid id)
+        {
+            //Add taking id from JWT token
+            var user = _service.GetUser(id);
+            return Ok(user);
+        }
 
-        //[Authorize]
-        //[HttpPost("DeleteAccount")]
-        //public IActionResult DeleteAccount(Guid id)
-        //{
-        //    _service.DeleteUser(id);
-        //    return Ok();
-        //}
+        [Authorize]
+        [HttpPost("DeleteAccount")]
+        public IActionResult DeleteAccount(Guid id)
+        { 
+            //Add checking id == id from JWT token
+            _service.DeleteUser(id);
+            return Ok();
+        }
     }
 }
