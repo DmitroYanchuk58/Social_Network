@@ -3,9 +3,9 @@ using System.Text;
 
 namespace BAL.Helpers.Interfaces
 {
-    public class AesEncryptionHelper : IEncryption
+    public static class AesEncryptor
     {
-        public string Decrypt(string ciphertext)
+        public static string Decrypt(string ciphertext)
         {
             if (string.IsNullOrEmpty(ciphertext))
             {
@@ -28,7 +28,7 @@ namespace BAL.Helpers.Interfaces
             }
         }
 
-        public string Encrypt(string plaintext)
+        public static string Encrypt(string plaintext)
         {
             if (string.IsNullOrEmpty(plaintext))
             {

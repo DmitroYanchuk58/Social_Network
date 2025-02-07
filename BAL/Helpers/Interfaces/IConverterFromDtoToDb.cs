@@ -1,9 +1,9 @@
 ﻿using EntityDB = DAL.Entities.Entity;
-using EntityDTO = BAL.DTOs.Entity;
+using EntityDTO = BAL.DTOs.IEntity;
 
 namespace BAL.Helpers.Interfaces
 {
-    public interface IConverter<T, S> 
+    public interface IConverterFromDtoToDb<T, S> 
         where T : EntityDB
         where S : EntityDTO
     {

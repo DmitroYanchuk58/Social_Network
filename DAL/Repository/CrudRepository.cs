@@ -1,19 +1,13 @@
 ﻿using DAL.DatabaseContextNamespace;
 using DAL.Entities;
 using DAL.Helpers.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 
 namespace DAL.Repository
 {
     public class CrudRepository<T> where T : Entity
     {
         private readonly DatabaseContext _context;
-        private IEntityHelper<T> _entityHelper;
+        private readonly IEntityHelper<T> _entityHelper;
 
         public CrudRepository(DatabaseContext context, IEntityHelper<T> helper)
         {
@@ -39,21 +33,34 @@ namespace DAL.Repository
                 throw new ArgumentNullException(nameof(updatedEntity));
             }
 
-            var originalEntity = _context.Set<T>().Where(entity => entity.Id == idUpdatedEntity).First();
+            T originalEntity;
 
-            if(originalEntity == null)
+            try
             {
-                throw new ArgumentNullException(nameof(idUpdatedEntity));
+                originalEntity = _context.Set<T>().Where(entity => entity.Id == idUpdatedEntity).First();
+            }
+            catch 
+            {
+                throw new ArgumentException("Id was not found", nameof(idUpdatedEntity));
             }
 
-            originalEntity = _entityHelper.CopyTo(updatedEntity, originalEntity);
+            _entityHelper.CopyTo(updatedEntity, originalEntity);
 
             _context.SaveChanges();
         }
 
         public void Delete(Guid idDeleteEntity)
         {
-            var deleteEntity = _context.Set<T>().Where(entity => entity.Id == idDeleteEntity).First();
+            T deleteEntity;
+
+            try
+            {
+                deleteEntity = _context.Set<T>().Where(entity => entity.Id == idDeleteEntity).First();
+            }
+            catch
+            {
+                throw new ArgumentException("Id was not found", nameof(idDeleteEntity));
+            }
 
             _context.Set<T>().Remove(deleteEntity);
 

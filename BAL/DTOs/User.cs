@@ -1,12 +1,14 @@
 ﻿namespace BAL.DTOs
 {
-    public class User : Entity
+    public class User : IEntity
     {
         private string nickname;
 
         private string password;
 
         private string email;
+
+        private Guid id;
 
         public string Nickname
         {
@@ -74,6 +76,16 @@
             }
         }
 
-
+        public Guid Id
+        {
+            get
+            {
+                return id;
+            }
+            set
+            {
+                id = value;
+            }
+        }
     }
 }
