@@ -8,6 +8,8 @@
 
         private string email;
 
+        private Guid id;
+
         public string Nickname
         {
             get
@@ -74,6 +76,16 @@
             }
         }
 
-
+        public Guid Id
+        {
+            get
+            {
+                return id;
+            }
+            set
+            {
+                id = value;
+            }
+        }
     }
 }
