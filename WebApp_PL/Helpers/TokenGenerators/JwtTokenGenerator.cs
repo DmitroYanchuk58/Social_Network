@@ -27,5 +27,15 @@ namespace WebApp_PL.Helpers
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
+        public static SymmetricSecurityKey GetKey(WebApplicationBuilder builder)
+        {
+            var configuration = builder.Configuration;
+            var secretKey = configuration["JwtSettings:SecretKey"];
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
+
+            return key;
+        }
+
     }
 }
