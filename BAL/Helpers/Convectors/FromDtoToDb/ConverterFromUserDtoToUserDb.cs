@@ -4,13 +4,13 @@ using UserDto = BAL.DTOs.User;
 
 namespace BAL.Helpers.Convectors
 {
-    public class ConverterFromDbUserToUserDto : IConverter<UserDb, UserDto>
+    public class ConverterFromUserDtoToUserDb : IConverterFromDtoToDb<UserDb, UserDto>
     {
         public UserDb Convert(UserDto userDto)
         {
             if (userDto == null)
             {
-                throw new ArgumentNullException(nameof(userDto));
+                ArgumentNullException.ThrowIfNull(nameof(userDto));
             }
 
             UserDb userDb = new UserDb()

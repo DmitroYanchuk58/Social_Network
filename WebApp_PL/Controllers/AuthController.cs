@@ -14,16 +14,16 @@ namespace WebApp_PL.Controllers
     [Route("[controller]")]
     public class AuthController : Controller
     {
-        IUserService _service;
+        IAuthService _service;
         ITokenGenerator _tokenGenerator;
 
-        public AuthController(IUserService service)
+        public AuthController(IAuthService service)
         {
             _service = service;
             this._tokenGenerator = new JwtTokenGenerator();
         }
 
-        [HttpGet]
+        [HttpGet("Login")]
         public IActionResult Login(string email, string password)
         {
             var isAuthenticated = _service.Authentication(email, password);
@@ -35,7 +35,7 @@ namespace WebApp_PL.Controllers
             return Unauthorized(new { Message = "Invalid credentials" });
         }
 
-        [HttpPost]
+        [HttpPost("Registration")]
         public IActionResult Registration(string email, string password, string nickname)
         {
             try

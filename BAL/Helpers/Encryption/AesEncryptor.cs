@@ -3,13 +3,13 @@ using System.Text;
 
 namespace BAL.Helpers.Interfaces
 {
-    public class AesEncryptionHelper : IEncryption
+    public static class AesEncryptor
     {
-        public string Decrypt(string ciphertext)
+        public static string Decrypt(string ciphertext)
         {
             if (string.IsNullOrEmpty(ciphertext))
             {
-                throw new ArgumentException(nameof(ciphertext));
+                throw new ArgumentException("Ciphertext cannot be null or empty.", nameof(ciphertext));
             }
 
             byte[] Key = Encoding.UTF8.GetBytes("Dima_Yanchuk_Key");
@@ -28,7 +28,7 @@ namespace BAL.Helpers.Interfaces
             }
         }
 
-        public string Encrypt(string plaintext)
+        public static string Encrypt(string plaintext)
         {
             if (string.IsNullOrEmpty(plaintext))
             {
