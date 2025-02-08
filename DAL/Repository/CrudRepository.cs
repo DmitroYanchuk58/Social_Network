@@ -33,11 +33,15 @@ namespace DAL.Repository
                 throw new ArgumentNullException(nameof(updatedEntity));
             }
 
-            var originalEntity = _context.Set<T>().Where(entity => entity.Id == idUpdatedEntity).First();
+            T originalEntity;
 
-            if(originalEntity == null)
+            try
             {
-                throw new ArgumentNullException(nameof(idUpdatedEntity));
+                originalEntity = _context.Set<T>().Where(entity => entity.Id == idUpdatedEntity).First();
+            }
+            catch 
+            {
+                throw new ArgumentException("Id was not found", nameof(idUpdatedEntity));
             }
 
             _entityHelper.CopyTo(updatedEntity, originalEntity);
@@ -47,7 +51,16 @@ namespace DAL.Repository
 
         public void Delete(Guid idDeleteEntity)
         {
-            var deleteEntity = _context.Set<T>().Where(entity => entity.Id == idDeleteEntity).First();
+            T deleteEntity;
+
+            try
+            {
+                deleteEntity = _context.Set<T>().Where(entity => entity.Id == idDeleteEntity).First();
+            }
+            catch
+            {
+                throw new ArgumentException("Id was not found", nameof(idDeleteEntity));
+            }
 
             _context.Set<T>().Remove(deleteEntity);
 

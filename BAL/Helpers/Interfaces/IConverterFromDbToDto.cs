@@ -1,12 +1,12 @@
 ﻿using EntityDB = DAL.Entities.Entity;
-using EntityDTO = BAL.DTOs.Entity;
+using EntityDTO = BAL.DTOs.IEntity;
 
 namespace BAL.Helpers.Interfaces
 {
-    public interface IConverter<out T, in S> 
+    public interface IConverterFromDbToDto<T, S>
         where T : EntityDB
         where S : EntityDTO
     {
-        public T Convert(S entity);
+        public S Convert(T entity);
     }
 }

@@ -24,6 +24,13 @@ builder.Services.AddDbContext<DatabaseContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString(@"Data Source=desktop-cpi51i3;Initial Catalog=SocialNetworkDatabase;Integrated Security=True;Encrypt=True;Trust Server Certificate=True")));
 
 //JWT Token
+//SHITY CODE CHANGE THAT
+var configuration = builder.Configuration;
+var secretKey = configuration["JwtSettings:SecretKey"];
+
+var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
+//YES THIS SHIT
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -33,12 +40,14 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Dmitro_Yanchuk_Secure_Long_Secret_Key_123!"))
+            IssuerSigningKey = key
         };
     });
+
 builder.Services.AddAuthorization();
 
 //Custom services
+builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();

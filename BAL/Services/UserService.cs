@@ -1,16 +1,12 @@
-﻿using BAL.DTOs;
-using DAL.Entities;
+﻿using BAL.Helpers.Convectors;
+using BAL.Helpers.Interfaces;
+using BAL.Services.Interfaces;
+using DAL.DatabaseContextNamespace;
+using DAL.Helpers.EntityHelpers;
+using DAL.Helpers.Interfaces;
 using DAL.Repository;
 using UserDB = DAL.Entities.User;
 using UserDto = BAL.DTOs.User;
-using BAL.Helpers;
-using BAL.Helpers.Interfaces;
-using BAL.Helpers.Gmail;
-using BAL.Helpers.Convectors;
-using DAL.Helpers.Interfaces;
-using DAL.Helpers.EntityHelpers;
-using DAL.DatabaseContextNamespace;
-using BAL.Services.Interfaces;
 
 namespace BAL.Services
 {
@@ -18,58 +14,83 @@ namespace BAL.Services
     {
         private CrudRepository<UserDB> _crudRepository { get; set; }
 
-        private readonly IEncryption _encryption;
-        private readonly IGmailHelper _gmailHelper;
-        private readonly IConverter<UserDB, UserDto> _converter;
-
+        private readonly IConverterFromDbToDto<UserDB, UserDto> _converterToDto;
+        private readonly IConverterFromDtoToDb<UserDB, UserDto> _converterToDb;
         public UserService(DatabaseContext databaseContext)
         {
             IEntityHelper<UserDB> userHelper = new UserHelper();
             this._crudRepository = new CrudRepository<UserDB>(databaseContext, userHelper);
-            this._encryption = new AesEncryptionHelper();
-            this._gmailHelper = new GmailHelper();
-            this._converter = new ConverterFromDbUserToUserDto();
+            this._converterToDto = new ConverterFromUserDbToUserDto();
+            this._converterToDb = new ConverterFromUserDtoToUserDb();
         }
 
-        public void Registration(string email, string password, string nickname)
+        public UserDto GetUser(Guid id)
         {
-            var encryptedPassword = this._encryption.Encrypt(password);
-
-            if (!this._gmailHelper.IsGmail(email))
+            UserDB userDb;
+            try
             {
+<<<<<<< HEAD
                 throw new ArgumentException("Email should has @gmail.com",nameof(email));
+=======
+                userDb = this._crudRepository.Get(id);
+            }
+            catch
+            {
+                throw new KeyNotFoundException($"User with ID {id} not found.");
+            }
+            var userDto = this._converterToDto.Convert(userDb);
+            return userDto;
+        }
+
+        public void DeleteUser(Guid id)
+        {
+            this._crudRepository.Delete(id);
+        }
+
+        public void ChangeNickname(Guid id, string newNickname)
+        {
+            if (string.IsNullOrWhiteSpace(newNickname))
+            {
+                throw new ArgumentNullException(nameof(newNickname));
+>>>>>>> 95af41002ed13c6ab7d44c8f00595d4f730654fd
             }
 
-            UserDto userDto = new UserDto() 
+            var user = new UserDB()
             {
-                Email = email,
-                Password = encryptedPassword,
-                Nickname = nickname
+                Nickname = newNickname,
+                Password = null,
+                Email = null
             };
 
-            UserDB userDB = this._converter.Convert(userDto);
-            
-            _crudRepository.Create(userDB);
+            _crudRepository.Update(id, user);
         }
 
-        public bool Authentication(string email, string password)
+        public void ChangePassword(Guid id, string newPassword)
         {
-            if (String.IsNullOrEmpty(email))
+            if (string.IsNullOrWhiteSpace(newPassword))
             {
-                throw new ArgumentNullException(nameof(email));
+                throw new ArgumentNullException(nameof(newPassword));
             }
 
-            if (String.IsNullOrEmpty(password))
-            {
-                throw new ArgumentNullException(nameof(password));
-            }
+            newPassword = AesEncryptor.Encrypt(newPassword);
 
+            var user = new UserDB()
+            {
+                Nickname = null,
+                Password = newPassword,
+                Email = null
+            };
+
+<<<<<<< HEAD
             var users = _crudRepository.GetAll();
 
             var ifUserExist = users.Any(user => String.Equals(email, user.Email) 
             && String.Equals(password, this._encryption.Decrypt(user.Password)));
 
             return ifUserExist;
+=======
+            _crudRepository.Update(id, user);
+>>>>>>> 95af41002ed13c6ab7d44c8f00595d4f730654fd
         }
     }
 }

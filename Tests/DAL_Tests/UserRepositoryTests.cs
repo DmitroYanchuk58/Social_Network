@@ -49,9 +49,15 @@ namespace Tests.DAL_Tests
         [Test]
         public void Test_CreateIncorrectUser()
         {
+<<<<<<< HEAD
             UserDb userNull = new UserDb() { Nickname = null, Email = null, Password = null };
             UserDb userNotFull = new UserDb() { Nickname = "dddd", Email=null,Password=null };
             UserDb userIncorrectEmail = new UserDb() {Email="dddd",Nickname="Ahome",Password="02302408942" };
+=======
+            UserDb userNull = new UserDb() { Nickname=null, Email=null, Password=null };
+            UserDb userNotFull = new UserDb() { Nickname = "dddd", Email=null, Password=null };
+            UserDb userIncorrectEmail = new UserDb() { Email="dddd",Nickname="Ahome",Password="02302408942" };
+>>>>>>> 95af41002ed13c6ab7d44c8f00595d4f730654fd
 
             Assert.Throws<ArgumentNullException>(() => _repository.Create(userNull));
             Assert.Throws<DbUpdateException>(() => _repository.Create(userNotFull));
@@ -66,7 +72,11 @@ namespace Tests.DAL_Tests
 
 
             var idFirstUser = _repository.GetAll().First().Id;
+<<<<<<< HEAD
             UserDb correctUserUpdate = new UserDb() {Email = $"tuutut{randomNumber}@gmail.com", Nickname=null, Password=null};
+=======
+            UserDb correctUserUpdate = new UserDb() {Email = $"tuutut{randomNumber}@gmail.com", Nickname=null, Password=null };
+>>>>>>> 95af41002ed13c6ab7d44c8f00595d4f730654fd
 
             Assert.DoesNotThrow(() => _repository.Update(idFirstUser, correctUserUpdate));
 
@@ -78,12 +88,21 @@ namespace Tests.DAL_Tests
         public void Test_UpdateFailure()
         {
             var idFirstUser = _repository.GetAll().First().Id;
+            var firstUser = _repository.GetAll()[0];
 
             UserDb nullUser = null;
+<<<<<<< HEAD
             UserDb emptyUser = new UserDb() {Nickname=null, Email= null, Password = null };
+=======
+            UserDb emptyUser = new UserDb() { Nickname=null, Email=null, Password = null };
+>>>>>>> 95af41002ed13c6ab7d44c8f00595d4f730654fd
 
             Assert.Throws<ArgumentNullException>(() => _repository.Update(idFirstUser, nullUser));
             Assert.Throws<ArgumentNullException>(() => _repository.Update(idFirstUser, emptyUser));
+
+            Assert.Throws<ArgumentException>(
+                () => _repository.Update(Guid.NewGuid(), firstUser)
+            );
         }
 
         [Test] 
@@ -102,7 +121,7 @@ namespace Tests.DAL_Tests
         [Test]
         public void Test_DeleteFailure()
         {
-            Assert.Throws<InvalidOperationException>(() => _repository.Delete(Guid.NewGuid()));
+            Assert.Throws<ArgumentException>(() => _repository.Delete(Guid.NewGuid()));
         }
 
         [Test]
