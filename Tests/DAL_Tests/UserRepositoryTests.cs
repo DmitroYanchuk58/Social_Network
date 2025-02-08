@@ -1,16 +1,7 @@
-﻿using BAL.DTOs;
-using DAL.DatabaseContextNamespace;
-using DAL.Entities;
-using DAL.Helpers.EntityHelpers;
+﻿using DAL.DatabaseContextNamespace;
 using DAL.Helpers.Interfaces;
 using DAL.Repository;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UserDb = DAL.Entities.User;
 using UserHelperDB = DAL.Helpers.EntityHelpers.UserHelper;
 
@@ -51,16 +42,22 @@ namespace Tests.DAL_Tests
 
             int countUsersAfterCreating = _dbContext.Users.Count();
 
-            Assert.IsTrue(countUsersBeforeCreating != countUsersAfterCreating);
-            Assert.IsTrue(countUsersBeforeCreating+1 == countUsersAfterCreating);
+            Assert.That(countUsersBeforeCreating, Is.LessThanOrEqualTo(countUsersAfterCreating));
+            Assert.That(countUsersBeforeCreating + 1, Is.EqualTo(countUsersAfterCreating));
         }
 
         [Test]
         public void Test_CreateIncorrectUser()
         {
+<<<<<<< HEAD
+            UserDb userNull = new UserDb() { Nickname = null, Email = null, Password = null };
+            UserDb userNotFull = new UserDb() { Nickname = "dddd", Email=null,Password=null };
+            UserDb userIncorrectEmail = new UserDb() {Email="dddd",Nickname="Ahome",Password="02302408942" };
+=======
             UserDb userNull = new UserDb() { Nickname=null, Email=null, Password=null };
             UserDb userNotFull = new UserDb() { Nickname = "dddd", Email=null, Password=null };
             UserDb userIncorrectEmail = new UserDb() { Email="dddd",Nickname="Ahome",Password="02302408942" };
+>>>>>>> 95af41002ed13c6ab7d44c8f00595d4f730654fd
 
             Assert.Throws<ArgumentNullException>(() => _repository.Create(userNull));
             Assert.Throws<DbUpdateException>(() => _repository.Create(userNotFull));
@@ -75,12 +72,16 @@ namespace Tests.DAL_Tests
 
 
             var idFirstUser = _repository.GetAll().First().Id;
+<<<<<<< HEAD
+            UserDb correctUserUpdate = new UserDb() {Email = $"tuutut{randomNumber}@gmail.com", Nickname=null, Password=null};
+=======
             UserDb correctUserUpdate = new UserDb() {Email = $"tuutut{randomNumber}@gmail.com", Nickname=null, Password=null };
+>>>>>>> 95af41002ed13c6ab7d44c8f00595d4f730654fd
 
             Assert.DoesNotThrow(() => _repository.Update(idFirstUser, correctUserUpdate));
 
             var updatedUserEmail = _repository.GetAll().First().Email;
-            Assert.IsTrue(String.Equals(correctUserUpdate.Email, updatedUserEmail));
+            Assert.That(correctUserUpdate.Email, Is.EqualTo(updatedUserEmail));
         }
 
         [Test]
@@ -90,7 +91,11 @@ namespace Tests.DAL_Tests
             var firstUser = _repository.GetAll()[0];
 
             UserDb nullUser = null;
+<<<<<<< HEAD
+            UserDb emptyUser = new UserDb() {Nickname=null, Email= null, Password = null };
+=======
             UserDb emptyUser = new UserDb() { Nickname=null, Email=null, Password = null };
+>>>>>>> 95af41002ed13c6ab7d44c8f00595d4f730654fd
 
             Assert.Throws<ArgumentNullException>(() => _repository.Update(idFirstUser, nullUser));
             Assert.Throws<ArgumentNullException>(() => _repository.Update(idFirstUser, emptyUser));
@@ -104,13 +109,13 @@ namespace Tests.DAL_Tests
         public void Test_DeleteSuccess()
         {
             var idDeleteUser = _repository.GetAll().Last().Id;
-            var countUsersBefore = _repository.GetAll().Count();
+            var countUsersBefore = _repository.GetAll().Count;
 
             Assert.DoesNotThrow(() => _repository.Delete(idDeleteUser));
 
-            var countUsersAfter = _repository.GetAll().Count();
+            var countUsersAfter = _repository.GetAll().Count;
 
-            Assert.IsTrue(countUsersBefore - 1 == countUsersAfter);
+            Assert.That(countUsersBefore - 1, Is.EqualTo(countUsersAfter));
         }
 
         [Test]
@@ -130,8 +135,8 @@ namespace Tests.DAL_Tests
             var foundUser = _repository.Get(idFirstUser);
 
             Assert.IsNotNull(foundUser);
-            Assert.IsTrue(firstUser.Email == foundUser.Email &&
-                firstUser.Password == foundUser.Password);
+            Assert.That(firstUser.Email, Is.EqualTo(foundUser.Email));
+            Assert.That(firstUser.Password, Is.EqualTo(foundUser.Password));
         }
 
         [Test]

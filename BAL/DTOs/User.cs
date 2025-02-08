@@ -2,11 +2,11 @@
 {
     public class User : IEntity
     {
-        private string nickname;
+        private string? nickname;
 
-        private string password;
+        private string? password;
 
-        private string email;
+        private string? email;
 
         private Guid id;
 
