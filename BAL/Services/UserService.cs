@@ -29,9 +29,6 @@ namespace BAL.Services
             UserDB userDb;
             try
             {
-<<<<<<< HEAD
-                throw new ArgumentException("Email should has @gmail.com",nameof(email));
-=======
                 userDb = this._crudRepository.Get(id);
             }
             catch
@@ -52,7 +49,6 @@ namespace BAL.Services
             if (string.IsNullOrWhiteSpace(newNickname))
             {
                 throw new ArgumentNullException(nameof(newNickname));
->>>>>>> 95af41002ed13c6ab7d44c8f00595d4f730654fd
             }
 
             var user = new UserDB()
@@ -81,16 +77,7 @@ namespace BAL.Services
                 Email = null
             };
 
-<<<<<<< HEAD
-            var users = _crudRepository.GetAll();
-
-            var ifUserExist = users.Any(user => String.Equals(email, user.Email) 
-            && String.Equals(password, this._encryption.Decrypt(user.Password)));
-
-            return ifUserExist;
-=======
             _crudRepository.Update(id, user);
->>>>>>> 95af41002ed13c6ab7d44c8f00595d4f730654fd
         }
     }
 }
