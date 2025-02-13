@@ -30,7 +30,7 @@ namespace BAL.Services
 
             if (!IsGmailChecker.IsGmail(email))
             {
-                throw new ArgumentException(nameof(email));
+                throw new ArgumentException("Email can't be null",nameof(email));
             }
 
             UserDto userDto = new UserDto() 
