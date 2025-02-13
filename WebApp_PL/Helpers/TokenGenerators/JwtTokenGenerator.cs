@@ -2,13 +2,12 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using WebApp_PL.Helpers.TokenGenerators;
 
 namespace WebApp_PL.Helpers
 {
-    public class JwtTokenGenerator : ITokenGenerator
+    public class JwtTokenGenerator 
     {
-        public string GenerateToken(string username)
+        public static string GenerateToken(string username)
         {
             var claims = new[]
             {
