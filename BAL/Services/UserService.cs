@@ -53,8 +53,8 @@ namespace BAL.Services
             var user = new UserDB()
             {
                 Nickname = newNickname,
-                Password = null,
-                Email = null
+                Password = null!,
+                Email = null!
             };
 
             _crudRepository.Update(id, user);
@@ -71,9 +71,9 @@ namespace BAL.Services
 
             var user = new UserDB()
             {
-                Nickname = null,
+                Nickname = null!,
                 Password = newPassword,
-                Email = null
+                Email = null!
             };
 
             _crudRepository.Update(id, user);
