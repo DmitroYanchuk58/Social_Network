@@ -34,7 +34,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = JwtTokenGenerator.GetKey(builder)
+            IssuerSigningKey = JwtTokenGenerator.GetKey(builder.Configuration)
         };
     });
 builder.Services.AddAuthorization();

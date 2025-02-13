@@ -7,34 +7,30 @@ namespace WebApp_PL.Helpers
 {
     public class JwtTokenGenerator 
     {
-        public static string GenerateToken(string username)
+        public static string GenerateToken(string username, IConfiguration configuration)
         {
             var claims = new[]
             {
             new Claim(JwtRegisteredClaimNames.Sub, username),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-            };
+        };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Dmitro_Yanchuk_Secure_Long_Secret_Key_123!"));
+            var secretKey = configuration["JwtSettings:SecretKey"]; 
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(30),
+                expires: DateTime.UtcNow.AddMinutes(30),
                 signingCredentials: creds);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        public static SymmetricSecurityKey GetKey(WebApplicationBuilder builder)
+        public static SymmetricSecurityKey GetKey(IConfiguration configuration)
         {
-            var configuration = builder.Configuration;
             var secretKey = configuration["JwtSettings:SecretKey"];
-
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
-
-            return key;
+            return new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
         }
-
     }
 }

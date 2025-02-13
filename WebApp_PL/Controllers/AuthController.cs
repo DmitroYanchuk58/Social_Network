@@ -13,11 +13,13 @@ namespace WebApp_PL.Controllers
     [Route("[controller]")]
     public class AuthController : Controller
     {
-        IAuthService _service;
+        private readonly IAuthService _service;
+        private readonly IConfiguration _configuration;
 
-        public AuthController(IAuthService service)
+        public AuthController(IAuthService service, IConfiguration configuration)
         {
             _service = service;
+            _configuration = configuration;
         }
 
         [HttpGet("Login")]
@@ -26,7 +28,7 @@ namespace WebApp_PL.Controllers
             var isAuthenticated = _service.Authentication(email, password);
             if (isAuthenticated)
             {
-                var token = JwtTokenGenerator.GenerateToken(email);
+                var token = JwtTokenGenerator.GenerateToken(email, _configuration);
                 return Ok(new { token });
             }
             return Unauthorized(new { Message = "Invalid credentials" });
@@ -38,7 +40,7 @@ namespace WebApp_PL.Controllers
             try
             {
                 _service.Registration(email, password, nickname);
-                var token = JwtTokenGenerator.GenerateToken(email);
+                var token = JwtTokenGenerator.GenerateToken(email, _configuration);
                 return Ok(new { token });
             }
             catch (Exception ex)
