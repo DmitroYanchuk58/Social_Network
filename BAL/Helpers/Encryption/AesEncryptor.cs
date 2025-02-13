@@ -9,7 +9,7 @@ namespace BAL.Helpers.Interfaces
         {
             if (string.IsNullOrEmpty(ciphertext))
             {
-                throw new ArgumentException(nameof(ciphertext));
+                throw new ArgumentException("Ciphertext cannot be null or empty.", nameof(ciphertext));
             }
 
             byte[] Key = Encoding.UTF8.GetBytes("Dima_Yanchuk_Key");

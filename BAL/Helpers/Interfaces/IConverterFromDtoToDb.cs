@@ -3,7 +3,7 @@ using EntityDTO = BAL.DTOs.IEntity;
 
 namespace BAL.Helpers.Interfaces
 {
-    public interface IConverterFromDtoToDb<T, S> 
+    public interface IConverterFromDtoToDb<out T, in S> 
         where T : EntityDB
         where S : EntityDTO
     {

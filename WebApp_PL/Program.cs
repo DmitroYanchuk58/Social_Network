@@ -4,12 +4,11 @@ using DAL.DatabaseContextNamespace;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using WebApp_PL.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,13 +32,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Dmitro_Yanchuk_Secure_Long_Secret_Key_123!"))
+            IssuerSigningKey = JwtTokenGenerator.GetKey(builder.Configuration)
         };
     });
 builder.Services.AddAuthorization();
 
 //Custom services
-builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
@@ -58,4 +56,4 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.Run();
+await app.RunAsync();

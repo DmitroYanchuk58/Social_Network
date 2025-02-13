@@ -6,42 +6,45 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using WebApp_PL.Helpers;
-using WebApp_PL.Helpers.TokenGenerators;
 
 namespace WebApp_PL.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class AuthController : Controller
+    public class AuthController : ControllerBase
     {
-        IAuthService _service;
-        ITokenGenerator _tokenGenerator;
+        private readonly IAuthService _service;
+        private readonly IConfiguration _configuration;
 
-        public AuthController(IAuthService service)
+        public AuthController(IAuthService service, IConfiguration configuration)
         {
             _service = service;
-            this._tokenGenerator = new JwtTokenGenerator();
+            _configuration = configuration;
         }
 
         [HttpGet("Login")]
+        [ProducesResponseType(typeof(object), 200)] 
+        [ProducesResponseType(typeof(object), 401)]
         public IActionResult Login(string email, string password)
         {
             var isAuthenticated = _service.Authentication(email, password);
             if (isAuthenticated)
             {
-                var token = _tokenGenerator.GenerateToken(email);
+                var token = JwtTokenGenerator.GenerateToken(email, _configuration);
                 return Ok(new { token });
             }
             return Unauthorized(new { Message = "Invalid credentials" });
         }
 
         [HttpPost("Registration")]
+        [ProducesResponseType(typeof(object), 200)]
+        [ProducesResponseType(typeof(object), 401)]
         public IActionResult Registration(string email, string password, string nickname)
         {
             try
             {
                 _service.Registration(email, password, nickname);
-                var token = _tokenGenerator.GenerateToken(email);
+                var token = JwtTokenGenerator.GenerateToken(email, _configuration);
                 return Ok(new { token });
             }
             catch (Exception ex)

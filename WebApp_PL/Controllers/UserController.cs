@@ -1,16 +1,14 @@
 ﻿using BAL.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WebApp_PL.Helpers;
-using BAL.DTOs;
 
 namespace WebApp_PL.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class UserController : Controller
+    public class UserController : ControllerBase
     {
-        IUserService _service;
+        private readonly IUserService _service;
 
         public UserController(IUserService service)
         {
@@ -19,6 +17,9 @@ namespace WebApp_PL.Controllers
 
         [Authorize]
         [HttpPost("ChangeName")]
+        [ProducesResponseType(typeof(void), 200)]
+        [ProducesResponseType(typeof(string), 400)]
+        [ProducesResponseType(typeof(string), 401)]
         public IActionResult ChangeNickname(Guid id, string newNickname)
         {
             if (string.IsNullOrEmpty(newNickname))
@@ -31,6 +32,9 @@ namespace WebApp_PL.Controllers
 
         [Authorize]
         [HttpPost("ChangePassword")]
+        [ProducesResponseType(typeof(void), 200)]
+        [ProducesResponseType(typeof(string), 400)] 
+        [ProducesResponseType(typeof(string), 401)]
         public IActionResult ChangePassword(Guid id, string newPassword)
         {
             if (string.IsNullOrEmpty(newPassword))
@@ -42,6 +46,8 @@ namespace WebApp_PL.Controllers
         }
 
         [HttpGet("GetAccount")]
+        [ProducesResponseType(typeof(BAL.DTOs.User), 200)]
+        [ProducesResponseType(typeof(string), 404)]
         public IActionResult GetAccount(Guid id)
         {
             var user = _service.GetUser(id);
@@ -50,6 +56,8 @@ namespace WebApp_PL.Controllers
 
         [Authorize]
         [HttpGet("MyAccount")]
+        [ProducesResponseType(typeof(BAL.DTOs.User), 200)]
+        [ProducesResponseType(typeof(string), 401)]
         public IActionResult MyAccount(Guid id)
         {
             //Add taking id from JWT token
@@ -59,6 +67,9 @@ namespace WebApp_PL.Controllers
 
         [Authorize]
         [HttpPost("DeleteAccount")]
+        [ProducesResponseType(typeof(void), 200)]
+        [ProducesResponseType(typeof(string), 400)] 
+        [ProducesResponseType(typeof(string), 401)]
         public IActionResult DeleteAccount(Guid id)
         { 
             //Add checking id == id from JWT token

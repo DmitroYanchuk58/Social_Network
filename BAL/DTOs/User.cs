@@ -2,11 +2,11 @@
 {
     public class User : IEntity
     {
-        private string nickname;
+        private string? nickname;
 
-        private string password;
+        private string? password;
 
-        private string email;
+        private string? email;
 
         private Guid id;
 
@@ -14,7 +14,7 @@
         {
             get
             {
-                return nickname;
+                return nickname ?? string.Empty;
             }
             set
             {
@@ -36,7 +36,7 @@
         {
             get
             {
-                return password;
+                return password ?? string.Empty;
             }
             set
             {
@@ -58,7 +58,7 @@
         {
             get
             {
-                return email;
+                return email ?? string.Empty;
             }
             set
             {
