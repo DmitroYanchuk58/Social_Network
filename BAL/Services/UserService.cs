@@ -15,13 +15,12 @@ namespace BAL.Services
         private CrudRepository<UserDB> _crudRepository { get; set; }
 
         private readonly IConverterFromDbToDto<UserDB, UserDto> _converterToDto;
-        private readonly IConverterFromDtoToDb<UserDB, UserDto> _converterToDb;
+
         public UserService(DatabaseContext databaseContext)
         {
             IEntityHelper<UserDB> userHelper = new UserHelper();
             this._crudRepository = new CrudRepository<UserDB>(databaseContext, userHelper);
             this._converterToDto = new ConverterFromUserDbToUserDto();
-            this._converterToDb = new ConverterFromUserDtoToUserDb();
         }
 
         public UserDto GetUser(Guid id)
