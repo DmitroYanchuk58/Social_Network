@@ -59,8 +59,8 @@ namespace BAL.Services
 
             var users = _crudRepository.GetAll();
 
-            var ifUserExist = users.Where(user => String.Equals(email, user.Email) 
-            && String.Equals(password, AesEncryptor.Decrypt(user.Password))).Any();
+            var ifUserExist = users.Any(user => String.Equals(email, user.Email) 
+            && String.Equals(password, AesEncryptor.Decrypt(user.Password)));
 
             return ifUserExist;
         }
