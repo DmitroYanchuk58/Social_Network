@@ -5,7 +5,7 @@ using System.Text;
 
 namespace WebApp_PL.Helpers
 {
-    public class JwtTokenGenerator 
+    public static class JwtTokenGenerator 
     {
         public static string GenerateToken(string username, IConfiguration configuration)
         {

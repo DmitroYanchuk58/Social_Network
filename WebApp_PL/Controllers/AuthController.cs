@@ -11,7 +11,7 @@ namespace WebApp_PL.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class AuthController : Controller
+    public class AuthController : ControllerBase
     {
         private readonly IAuthService _service;
         private readonly IConfiguration _configuration;
@@ -23,6 +23,8 @@ namespace WebApp_PL.Controllers
         }
 
         [HttpGet("Login")]
+        [ProducesResponseType(typeof(object), 200)] 
+        [ProducesResponseType(typeof(object), 401)]
         public IActionResult Login(string email, string password)
         {
             var isAuthenticated = _service.Authentication(email, password);
@@ -35,6 +37,8 @@ namespace WebApp_PL.Controllers
         }
 
         [HttpPost("Registration")]
+        [ProducesResponseType(typeof(object), 200)]
+        [ProducesResponseType(typeof(object), 401)]
         public IActionResult Registration(string email, string password, string nickname)
         {
             try

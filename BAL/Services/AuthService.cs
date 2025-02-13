@@ -15,7 +15,7 @@ namespace BAL.Services
     {
         private CrudRepository<UserDB> _crudRepository { get; set; }
 
-        private readonly IConverterFromDtoToDb<UserDB, UserDto> _converter;
+        private readonly ConverterFromUserDtoToUserDb _converter;
 
         public AuthService(DatabaseContext databaseContext)
         {
@@ -30,7 +30,7 @@ namespace BAL.Services
 
             if (!IsGmailChecker.IsGmail(email))
             {
-                throw new ArgumentException(nameof(email));
+                throw new ArgumentException("Email can't be null",nameof(email));
             }
 
             UserDto userDto = new UserDto() 
@@ -59,8 +59,8 @@ namespace BAL.Services
 
             var users = _crudRepository.GetAll();
 
-            var ifUserExist = users.Where(user => String.Equals(email, user.Email) 
-            && String.Equals(password, AesEncryptor.Decrypt(user.Password))).Any();
+            var ifUserExist = users.Any(user => String.Equals(email, user.Email) 
+            && String.Equals(password, AesEncryptor.Decrypt(user.Password)));
 
             return ifUserExist;
         }
