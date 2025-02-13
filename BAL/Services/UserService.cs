@@ -14,7 +14,7 @@ namespace BAL.Services
     {
         private CrudRepository<UserDB> _crudRepository { get; set; }
 
-        private readonly IConverterFromDbToDto<UserDB, UserDto> _converterToDto;
+        private readonly ConverterFromUserDbToUserDto _converterToDto;
 
         public UserService(DatabaseContext databaseContext)
         {
