@@ -10,7 +10,7 @@ namespace BAL.Helpers.Convectors
         {
             if (userDb == null)
             {
-                throw new ArgumentNullException(nameof(userDb));
+                ArgumentNullException.ThrowIfNull(nameof(userDb));
             }
 
             UserDto userDto = new UserDto()

@@ -14,7 +14,7 @@
         {
             get
             {
-                return nickname;
+                return nickname ?? string.Empty;
             }
             set
             {
@@ -36,7 +36,7 @@
         {
             get
             {
-                return password;
+                return password ?? string.Empty;
             }
             set
             {
@@ -58,7 +58,7 @@
         {
             get
             {
-                return email;
+                return email ?? string.Empty;
             }
             set
             {
