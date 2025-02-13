@@ -6,7 +6,6 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using WebApp_PL.Helpers;
-using WebApp_PL.Helpers.TokenGenerators;
 
 namespace WebApp_PL.Controllers
 {
@@ -14,13 +13,13 @@ namespace WebApp_PL.Controllers
     [Route("[controller]")]
     public class AuthController : Controller
     {
-        IAuthService _service;
-        ITokenGenerator _tokenGenerator;
+        private readonly IAuthService _service;
+        private readonly IConfiguration _configuration;
 
-        public AuthController(IAuthService service)
+        public AuthController(IAuthService service, IConfiguration configuration)
         {
             _service = service;
-            this._tokenGenerator = new JwtTokenGenerator();
+            _configuration = configuration;
         }
 
         [HttpGet("Login")]
@@ -29,7 +28,7 @@ namespace WebApp_PL.Controllers
             var isAuthenticated = _service.Authentication(email, password);
             if (isAuthenticated)
             {
-                var token = _tokenGenerator.GenerateToken(email);
+                var token = JwtTokenGenerator.GenerateToken(email, _configuration);
                 return Ok(new { token });
             }
             return Unauthorized(new { Message = "Invalid credentials" });
@@ -41,7 +40,7 @@ namespace WebApp_PL.Controllers
             try
             {
                 _service.Registration(email, password, nickname);
-                var token = _tokenGenerator.GenerateToken(email);
+                var token = JwtTokenGenerator.GenerateToken(email, _configuration);
                 return Ok(new { token });
             }
             catch (Exception ex)

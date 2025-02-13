@@ -2,30 +2,37 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using WebApp_PL.Helpers.TokenGenerators;
 
 namespace WebApp_PL.Helpers
 {
-    public class JwtTokenGenerator : ITokenGenerator
+    public class JwtTokenGenerator 
     {
-        public string GenerateToken(string username)
+        public static string GenerateToken(string username, IConfiguration configuration)
         {
+            var secretKey = configuration["JwtSettings:SecretKey"];
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
             var claims = new[]
             {
-            new Claim(JwtRegisteredClaimNames.Sub, username),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                new Claim(JwtRegisteredClaimNames.Sub, username),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
-
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Dmitro_Yanchuk_Secure_Long_Secret_Key_123!"));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(30),
-                signingCredentials: creds);
+                expires: DateTime.UtcNow.AddMinutes(30),
+                signingCredentials: creds
+            );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
+
+        public static SymmetricSecurityKey GetKey(IConfiguration configuration)
+        {
+            var secretKey = configuration["JwtSettings:SecretKey"];
+            return new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSettings:SecretKey"]));
+        }
     }
 }
