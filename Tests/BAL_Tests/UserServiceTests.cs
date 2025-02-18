@@ -49,13 +49,13 @@ namespace Tests.BAL_Tests
         {
             var firstUser = _crudRepository.GetAll()[0];
             var secondUser = this._service.GetUser(firstUser.Id);
-            Assert.That(firstUser.Nickname == secondUser.Nickname, Is.True);
+            Assert.That(firstUser.Nickname, Is.EqualTo(secondUser.Nickname));
         }
 
         [Test]
         public void Test_DeleteUser_Success()
         {
-            var userForDelete = _crudRepository.GetAll().Last();
+            var userForDelete = _crudRepository.GetAll()[^1];
             Assert.DoesNotThrow(
                 () => _service.DeleteUser(userForDelete.Id)
             );
@@ -65,10 +65,10 @@ namespace Tests.BAL_Tests
         public void Test_DeleteUser_Success_Count()
         {
             var countUsersBefore = _crudRepository.GetAll().Count;
-            var userForDelete = _crudRepository.GetAll().Last();
+            var userForDelete = _crudRepository.GetAll()[^1];
             _service.DeleteUser(userForDelete.Id);
             var countUsersAfter = _crudRepository.GetAll().Count;
-            Assert.That(countUsersBefore - 1 == countUsersAfter);
+            Assert.That(countUsersBefore - 1, Is.EqualTo(countUsersAfter));
         }
 
         [Test]
@@ -86,7 +86,7 @@ namespace Tests.BAL_Tests
             var newNickname = "Aragorn";
             _service.ChangeNickname(id, newNickname);
             var nicknameAfterUpdate = _crudRepository.GetAll()[78].Nickname;
-            Assert.That(newNickname == nicknameAfterUpdate, Is.True);
+            Assert.That(newNickname, Is.EqualTo(nicknameAfterUpdate));
         }
 
         [Test]
@@ -143,7 +143,7 @@ namespace Tests.BAL_Tests
             _service.ChangePassword(id, newPassword);
             var passwordAfterUpdate = _crudRepository.GetAll()[78].Password;
             passwordAfterUpdate = AesEncryptor.Decrypt(passwordAfterUpdate);
-            Assert.That(newPassword == passwordAfterUpdate, Is.True);
+            Assert.That(newPassword, Is.EqualTo(passwordAfterUpdate));
         }
     }
 }

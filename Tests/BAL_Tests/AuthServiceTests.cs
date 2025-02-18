@@ -26,7 +26,7 @@ namespace Tests.BAL_Tests
         [Test]
         public void Test_Register_Success()
         {
-            Random random = new Random();
+            Random random = new();
             int randomNumber = random.Next(1, 100001);
 
             var countUsersBefore = _crudRepository.GetAll().Count;
@@ -41,7 +41,7 @@ namespace Tests.BAL_Tests
 
             var countUsersAfter = _crudRepository.GetAll().Count;
 
-            Assert.That(countUsersBefore == countUsersAfter - 1, Is.True);
+            Assert.That(countUsersBefore, Is.EqualTo(countUsersAfter - 1));
         }
 
         [Test]

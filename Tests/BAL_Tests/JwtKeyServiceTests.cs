@@ -16,7 +16,7 @@ namespace Tests.BAL_Tests
         public void IsJwtKeyRight()
         {
             var key = service.GetJwtSecretKey();
-            Assert.That(key == "Dmitro_Yanchuk_Secure_Long_Secret_Key_123!", Is.True);
+            Assert.That(key, Is.EqualTo("Dmitro_Yanchuk_Secure_Long_Secret_Key_123!"));
         }
     }
 }
