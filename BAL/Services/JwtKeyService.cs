@@ -1,4 +1,5 @@
-﻿using DAL.DbContext;
+﻿using BAL.Helpers.Interfaces;
+using DAL.DbContext;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,10 @@ namespace BAL.Services
 
         public JwtKeyService()
         {
-            dbContext = new();
+            var username = "Dima";
+            var password = AesEncryptor.Decrypt("xo7J5AytJ5pUjOoBsSUfNQ==");
+            var connectionString = $"mongodb+srv://{username}:{password}@cluster0.7hu6y.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+            dbContext = new(connectionString);
         }
 
         public string GetJwtSecretKey()

@@ -10,10 +10,10 @@ namespace DAL.DbContext
 {
     public class MongoDbContext
     {
-        private IMongoDatabase database;
-        public MongoDbContext() 
+        private readonly IMongoDatabase database;
+
+        public MongoDbContext(string connectionString)
         {
-            var connectionString = "mongodb+srv://Dima:55555@cluster0.7hu6y.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
             var mongoClient = new MongoClient(connectionString);
             database = mongoClient.GetDatabase("SocialNetwork");
         }
