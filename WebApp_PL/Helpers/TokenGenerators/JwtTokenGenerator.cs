@@ -8,14 +8,9 @@ namespace WebApp_PL.Helpers
 {
     public static class JwtTokenGenerator 
     {
-        private static readonly JwtKeyService keyService;
-        
-        static JwtTokenGenerator()
-        {
-            keyService = new JwtKeyService();
-        }
+        private static readonly JwtKeyService keyService = new();
 
-        public static string GenerateToken(string username, IConfiguration configuration)
+        public static string GenerateToken(string username)
         {
             var secretKey = keyService.GetJwtSecretKey();
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
