@@ -37,10 +37,10 @@ namespace WebApp_PL.Helpers
         }
 
 
-        public static SymmetricSecurityKey GetKey(IConfiguration configuration)
+        public static SymmetricSecurityKey GetKey()
         {
             var secretKey = keyService.GetJwtSecretKey();
-            return new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSettings:SecretKey"]));
+            return new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
         }
     }
 }
