@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using BAL.Services;
+using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -7,9 +8,16 @@ namespace WebApp_PL.Helpers
 {
     public static class JwtTokenGenerator 
     {
+        private static readonly JwtKeyService keyService;
+        
+        static JwtTokenGenerator()
+        {
+            keyService = new JwtKeyService();
+        }
+
         public static string GenerateToken(string username, IConfiguration configuration)
         {
-            var secretKey = configuration["JwtSettings:SecretKey"];
+            var secretKey = keyService.GetJwtSecretKey();
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
@@ -31,7 +39,7 @@ namespace WebApp_PL.Helpers
 
         public static SymmetricSecurityKey GetKey(IConfiguration configuration)
         {
-            var secretKey = configuration["JwtSettings:SecretKey"];
+            var secretKey = keyService.GetJwtSecretKey();
             return new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSettings:SecretKey"]));
         }
     }

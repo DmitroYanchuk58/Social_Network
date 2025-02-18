@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL.DatabaseContextNamespace
 {
-    public class DatabaseContext : DbContext
+    public class DatabaseContext : Microsoft.EntityFrameworkCore.DbContext
     {
         public DbSet<User> Users { get; set; }
 
