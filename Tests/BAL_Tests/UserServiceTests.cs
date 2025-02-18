@@ -28,14 +28,6 @@ namespace Tests.BAL_Tests
         [Test]
         public void Test_GetUser_Failure_RandomId()
         {
-            Random random = new Random();
-            int randomNumber = random.Next(1, 100001);
-
-            var countUsersBefore = _crudRepository.GetAll().Count;
-
-            var email = $"jtrjryo{randomNumber}@gmail.com";
-            var password = $"6ty{randomNumber}j4yjy54{randomNumber}";
-            var nickname = $"fkefee{randomNumber}kerfk";
             Guid randomId = Guid.NewGuid();
             Assert.Throws<KeyNotFoundException>(
                 () => this._service.GetUser(randomId)
@@ -57,7 +49,7 @@ namespace Tests.BAL_Tests
         {
             var firstUser = _crudRepository.GetAll()[0];
             var secondUser = this._service.GetUser(firstUser.Id);
-            Assert.IsTrue(firstUser.Nickname == secondUser.Nickname);
+            Assert.That(firstUser.Nickname == secondUser.Nickname, Is.True);
         }
 
         [Test]
@@ -72,10 +64,10 @@ namespace Tests.BAL_Tests
         [Test]
         public void Test_DeleteUser_Success_Count()
         {
-            var countUsersBefore = _crudRepository.GetAll().Count();
+            var countUsersBefore = _crudRepository.GetAll().Count;
             var userForDelete = _crudRepository.GetAll().Last();
             _service.DeleteUser(userForDelete.Id);
-            var countUsersAfter = _crudRepository.GetAll().Count();
+            var countUsersAfter = _crudRepository.GetAll().Count;
             Assert.That(countUsersBefore - 1 == countUsersAfter);
         }
 
@@ -94,7 +86,7 @@ namespace Tests.BAL_Tests
             var newNickname = "Aragorn";
             _service.ChangeNickname(id, newNickname);
             var nicknameAfterUpdate = _crudRepository.GetAll()[78].Nickname;
-            Assert.That(newNickname == nicknameAfterUpdate);
+            Assert.That(newNickname == nicknameAfterUpdate, Is.True);
         }
 
         [Test]
@@ -111,7 +103,7 @@ namespace Tests.BAL_Tests
         {
             var id = _crudRepository.GetAll()[3].Id;
             Assert.Throws<ArgumentNullException>(
-                () => _service.ChangeNickname(id, null)
+                () => _service.ChangeNickname(id, null!)
             );
         }
 
@@ -121,7 +113,7 @@ namespace Tests.BAL_Tests
         {
             var id = _crudRepository.GetAll()[3].Id;
             Assert.Throws<ArgumentNullException>(
-                () => _service.ChangePassword(id, null)
+                () => _service.ChangePassword(id, null!)
             );
         }
 
@@ -151,7 +143,7 @@ namespace Tests.BAL_Tests
             _service.ChangePassword(id, newPassword);
             var passwordAfterUpdate = _crudRepository.GetAll()[78].Password;
             passwordAfterUpdate = AesEncryptor.Decrypt(passwordAfterUpdate);
-            Assert.That(newPassword == passwordAfterUpdate);
+            Assert.That(newPassword == passwordAfterUpdate, Is.True);
         }
     }
 }

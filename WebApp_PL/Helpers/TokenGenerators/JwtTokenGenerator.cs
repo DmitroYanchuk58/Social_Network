@@ -8,12 +8,7 @@ namespace WebApp_PL.Helpers
 {
     public static class JwtTokenGenerator 
     {
-        private static readonly JwtKeyService keyService;
-        
-        static JwtTokenGenerator()
-        {
-            keyService = new JwtKeyService();
-        }
+        private static readonly JwtKeyService keyService = new();
 
         public static string GenerateToken(string username, IConfiguration configuration)
         {

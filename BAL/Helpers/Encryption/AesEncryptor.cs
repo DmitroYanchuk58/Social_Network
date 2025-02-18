@@ -32,7 +32,7 @@ namespace BAL.Helpers.Interfaces
         {
             if (string.IsNullOrEmpty(plaintext))
             {
-                throw new ArgumentException(nameof(plaintext));
+                throw new ArgumentException("Plaintext cannot be null or empty.",nameof(plaintext));
             }
 
             byte[] Key = Encoding.UTF8.GetBytes("Dima_Yanchuk_Key");

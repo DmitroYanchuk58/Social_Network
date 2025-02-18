@@ -49,8 +49,8 @@ namespace Tests.DAL_Tests
         [Test]
         public void Test_CreateIncorrectUser()
         {
-            UserDb userNull = new UserDb() { Nickname = null, Email = null, Password = null };
-            UserDb userNotFull = new UserDb() { Nickname = "dddd", Email=null,Password=null };
+            UserDb userNull = new UserDb() { Nickname = null!, Email = null!, Password = null! };
+            UserDb userNotFull = new UserDb() { Nickname = "dddd", Email=null!,Password=null! };
             UserDb userIncorrectEmail = new UserDb() {Email="dddd",Nickname="Ahome",Password="02302408942" };
 
 
@@ -66,25 +66,25 @@ namespace Tests.DAL_Tests
             int randomNumber = random.Next(1, 100001);
 
 
-            var idFirstUser = _repository.GetAll().First().Id;
-            UserDb correctUserUpdate = new UserDb() {Email = $"tuutut{randomNumber}@gmail.com", Nickname=null, Password=null};
+            var idFirstUser = _repository.GetAll()[0].Id;
+            UserDb correctUserUpdate = new UserDb() {Email = $"tuutut{randomNumber}@gmail.com", Nickname=null!, Password=null!};
 
             Assert.DoesNotThrow(() => _repository.Update(idFirstUser, correctUserUpdate));
 
-            var updatedUserEmail = _repository.GetAll().First().Email;
+            var updatedUserEmail = _repository.GetAll()[0].Email;
             Assert.That(correctUserUpdate.Email, Is.EqualTo(updatedUserEmail));
         }
 
         [Test]
         public void Test_UpdateFailure()
         {
-            var idFirstUser = _repository.GetAll().First().Id;
+            var idFirstUser = _repository.GetAll()[0].Id;
             var firstUser = _repository.GetAll()[0];
 
-            UserDb nullUser = null;
-            UserDb emptyUser = new UserDb() {Nickname=null, Email= null, Password = null };
+            UserDb nullUser = null!;
+            UserDb emptyUser = new UserDb() {Nickname=null!, Email= null!, Password = null! };
 
-            Assert.Throws<ArgumentNullException>(() => _repository.Update(idFirstUser, nullUser));
+            Assert.Throws<ArgumentNullException>(() => _repository.Update(idFirstUser, nullUser!));
             Assert.Throws<ArgumentNullException>(() => _repository.Update(idFirstUser, emptyUser));
 
             Assert.Throws<ArgumentException>(
@@ -114,7 +114,7 @@ namespace Tests.DAL_Tests
         [Test]
         public void Test_GetSuccess()
         {
-            var firstUser = _repository.GetAll().First();
+            var firstUser = _repository.GetAll()[0];
             var idFirstUser = firstUser.Id;
 
             Assert.DoesNotThrow(() => _repository.Get(idFirstUser));

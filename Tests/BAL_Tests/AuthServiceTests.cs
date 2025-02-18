@@ -29,7 +29,7 @@ namespace Tests.BAL_Tests
             Random random = new Random();
             int randomNumber = random.Next(1, 100001);
 
-            var countUsersBefore = _crudRepository.GetAll().Count();
+            var countUsersBefore = _crudRepository.GetAll().Count;
 
             var email = $"jtrjryo{randomNumber}@gmail.com";
             var password = $"6ty{randomNumber}j4yjy54{randomNumber}";
@@ -39,16 +39,16 @@ namespace Tests.BAL_Tests
                 () => _service.Registration(email, password, nickname)
             );
 
-            var countUsersAfter = _crudRepository.GetAll().Count();
+            var countUsersAfter = _crudRepository.GetAll().Count;
 
-            Assert.IsTrue(countUsersBefore == countUsersAfter - 1);
+            Assert.That(countUsersBefore == countUsersAfter - 1, Is.True);
         }
 
         [Test]
         public void Test_Register_Failure()
         {
             Assert.Throws<ArgumentException>(
-                () => _service.Registration(null, null, null)
+                () => _service.Registration(null!, null!, null!)
             );
             Assert.Throws<ArgumentException>(
                 () => _service.Registration("", "", "")
@@ -68,7 +68,7 @@ namespace Tests.BAL_Tests
             var password = "admin";
             var isUserExist = _service.Authentication(email, password);
 
-            Assert.IsTrue(isUserExist);
+            Assert.That(isUserExist, Is.True);
         }
 
         [Test]
@@ -78,14 +78,14 @@ namespace Tests.BAL_Tests
             var wrongEmail = "1111@gmail.com";
             var emailWithoutGmail = "rhhefg";
             var emailEmpty = "";
-            string emailNull = null;
-            string nullPassword = null;
+            string emailNull = null!;
+            string nullPassword = null!;
 
             var isUserExist = _service.Authentication(wrongEmail, wrongPassword);
             var isUserExist2 = _service.Authentication(emailWithoutGmail, wrongPassword);
 
-            Assert.IsFalse(isUserExist); 
-            Assert.IsFalse(isUserExist2);
+            Assert.That(isUserExist, Is.False); 
+            Assert.That(isUserExist2, Is.False);
 
             Assert.Throws<ArgumentNullException>(
                 () => _service.Authentication(emailEmpty, wrongPassword)
