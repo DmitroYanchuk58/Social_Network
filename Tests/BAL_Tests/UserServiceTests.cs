@@ -1,22 +1,9 @@
-<<<<<<< HEAD
-﻿using BAL.Services;
-=======
-﻿using BAL.DTOs;
-using BAL.Helpers.Convectors;
 using BAL.Helpers.Interfaces;
 using BAL.Services;
->>>>>>> 95af41002ed13c6ab7d44c8f00595d4f730654fd
 using DAL.DatabaseContextNamespace;
-using DAL.Entities;
-using DAL.Helpers.EntityHelpers;
 using DAL.Helpers.Interfaces;
 using DAL.Repository;
 using Microsoft.EntityFrameworkCore;
-<<<<<<< HEAD
-=======
-using System;
-using System.Collections.Frozen;
->>>>>>> 95af41002ed13c6ab7d44c8f00595d4f730654fd
 using UserDb = DAL.Entities.User;
 using UserDto = BAL.DTOs.User;
 using UserHelper = DAL.Helpers.EntityHelpers.UserHelper;
@@ -27,7 +14,6 @@ namespace Tests.BAL_Tests
     {
         private CrudRepository<UserDb> _crudRepository;
         private UserService _service;
-        private IConverterFromDbToDto<UserDb, UserDto> _converterFromDbToDto;
 
         [SetUp]
         public void Setup()
@@ -37,13 +23,11 @@ namespace Tests.BAL_Tests
             IEntityHelper<UserDb> helper = new UserHelper();
             _crudRepository = new CrudRepository<UserDb>(dbContext, helper);
             _service = new UserService(dbContext);
-            this._converterFromDbToDto = new ConverterFromUserDbToUserDto();
         }
 
         [Test]
         public void Test_GetUser_Failure_RandomId()
         {
-<<<<<<< HEAD
             Random random = new Random();
             int randomNumber = random.Next(1, 100001);
 
@@ -52,13 +36,12 @@ namespace Tests.BAL_Tests
             var email = $"jtrjryo{randomNumber}@gmail.com";
             var password = $"6ty{randomNumber}j4yjy54{randomNumber}";
             var nickname = $"fkefee{randomNumber}kerfk";
-=======
             Guid randomId = Guid.NewGuid();
             Assert.Throws<KeyNotFoundException>(
                 () => this._service.GetUser(randomId)
             );
         }
->>>>>>> 95af41002ed13c6ab7d44c8f00595d4f730654fd
+
 
         [Test]
         public void Test_GetUser_Success_NotThrow()
@@ -69,11 +52,6 @@ namespace Tests.BAL_Tests
             );
         }
 
-<<<<<<< HEAD
-            var countUsersAfter = _crudRepository.GetAll().Count;
-
-            Assert.That(countUsersAfter - 1, Is.EqualTo(countUsersBefore));
-=======
         [Test]
         public void Test_GetUser_Success_IsTheSame()
         {
@@ -99,7 +77,6 @@ namespace Tests.BAL_Tests
             _service.DeleteUser(userForDelete.Id);
             var countUsersAfter = _crudRepository.GetAll().Count();
             Assert.That(countUsersBefore - 1 == countUsersAfter);
->>>>>>> 95af41002ed13c6ab7d44c8f00595d4f730654fd
         }
 
         [Test]
@@ -108,23 +85,6 @@ namespace Tests.BAL_Tests
             Assert.Throws<ArgumentException>(
                 () => _service.DeleteUser(Guid.NewGuid())
             );
-        }
-
-        [Test]
-        public void ChangeNickname_DoesNotThrow()
-        {
-<<<<<<< HEAD
-            var email = "dima555588@gmail.com";
-            var password = "admin";
-            var isUserExist = _service.Authentication(email, password);
-
-            Assert.That(isUserExist, Is.EqualTo(true));
-=======
-            var id = _crudRepository.GetAll()[27].Id;
-            Assert.DoesNotThrow(
-                () => _service.ChangeNickname(id, "Aragorn son of Aratorn")
-            );
->>>>>>> 95af41002ed13c6ab7d44c8f00595d4f730654fd
         }
 
         [Test]
@@ -146,10 +106,6 @@ namespace Tests.BAL_Tests
             );
         }
 
-<<<<<<< HEAD
-            Assert.That(isUserExist, Is.EqualTo(false));
-            Assert.That(isUserExist2, Is.EqualTo(false));
-=======
         [Test]  
         public void ChangeNickname_NullNickname()
         {
@@ -158,7 +114,7 @@ namespace Tests.BAL_Tests
                 () => _service.ChangeNickname(id, null)
             );
         }
->>>>>>> 95af41002ed13c6ab7d44c8f00595d4f730654fd
+
 
         [Test]
         public void ChangePassword_NullPassword()
