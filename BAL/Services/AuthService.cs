@@ -13,8 +13,7 @@ namespace BAL.Services
 {
     public class AuthService : IAuthService
     {
-        private CrudRepository<UserDB> _crudRepository { get; set; }
-
+        private readonly CrudRepository<UserDB> _crudRepository;
         private readonly ConverterFromUserDtoToUserDb _converter;
 
         public AuthService(DatabaseContext databaseContext)
@@ -33,7 +32,7 @@ namespace BAL.Services
                 throw new ArgumentException("Email can't be null",nameof(email));
             }
 
-            UserDto userDto = new UserDto() 
+            UserDto userDto = new() 
             {
                 Email = email,
                 Password = encryptedPassword,
