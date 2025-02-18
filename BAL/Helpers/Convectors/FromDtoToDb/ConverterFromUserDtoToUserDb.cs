@@ -8,10 +8,7 @@ namespace BAL.Helpers.Convectors
     {
         public UserDb Convert(UserDto userDto)
         {
-            if (userDto == null)
-            {
-                ArgumentNullException.ThrowIfNull(nameof(userDto));
-            }
+            ArgumentNullException.ThrowIfNull(nameof(userDto));
 
             UserDb userDb = new UserDb()
             {
