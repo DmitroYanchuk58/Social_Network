@@ -67,14 +67,13 @@ namespace BAL.Services
                 throw new ArgumentNullException(nameof(newPassword));
             }
 
-            newPassword = AesEncryptor.Encrypt(newPassword);
+            byte[] iv;
+            var user = _crudRepository.Get(id);
 
-            var user = new UserDB()
-            {
-                Nickname = null!,
-                Password = newPassword,
-                Email = null!
-            };
+            (newPassword, iv) = AesEncryptor.Encrypt(newPassword);
+            IVKeyService.CreateIVKey(user.Email,iv);
+
+            user.Password = newPassword;
 
             _crudRepository.Update(id, user);
         }

@@ -15,7 +15,7 @@ namespace BAL.Services
         public JwtKeyService()
         {
             var username = "Dima";
-            var password = AesEncryptor.Decrypt("xo7J5AytJ5pUjOoBsSUfNQ==");
+            var password = "55555";
             var connectionString = $"mongodb+srv://{username}:{password}@cluster0.7hu6y.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
             dbContext = new(connectionString);
         }

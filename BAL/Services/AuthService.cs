@@ -25,12 +25,17 @@ namespace BAL.Services
 
         public void Registration(string email, string password, string nickname)
         {
-            var encryptedPassword = AesEncryptor.Encrypt(password);
+            ArgumentException.ThrowIfNullOrEmpty(email);
+            ArgumentException.ThrowIfNullOrEmpty(password);
+            ArgumentException.ThrowIfNullOrEmpty(nickname);
 
             if (!IsGmailChecker.IsGmail(email))
             {
                 throw new ArgumentException("Email can't be null",nameof(email));
             }
+
+            var (encryptedPassword, iv) = AesEncryptor.Encrypt(password);
+            IVKeyService.CreateIVKey(email, iv);
 
             UserDto userDto = new() 
             {
@@ -56,12 +61,21 @@ namespace BAL.Services
                 throw new ArgumentNullException(nameof(password));
             }
 
-            var users = _crudRepository.GetAll();
+            try
+            {
+                var users = _crudRepository.GetAll();
 
-            var ifUserExist = users.Any(user => String.Equals(email, user.Email) 
-            && String.Equals(password, AesEncryptor.Decrypt(user.Password)));
+                var iv = IVKeyService.GetIVKKey(email);
 
-            return ifUserExist;
+                var ifUserExist = users.Any(user => String.Equals(email, user.Email)
+                && String.Equals(password, AesEncryptor.Decrypt(user.Password, iv)));
+
+                return ifUserExist;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

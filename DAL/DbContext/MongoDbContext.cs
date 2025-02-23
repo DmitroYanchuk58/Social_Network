@@ -18,6 +18,39 @@ namespace DAL.DbContext
             database = mongoClient.GetDatabase("SocialNetwork");
         }
 
+        public byte[] GetIVKey(string email)
+        {
+            ArgumentException.ThrowIfNullOrEmpty(email);
+            var keys = database.GetCollection<IVAesKey>("IVAesKey");
+            var firstKey = keys.Find(k => k.Gmail == email).FirstOrDefault();
+            var iv = firstKey.IVKey;
+            ArgumentException.ThrowIfNullOrEmpty(iv.ToString());
+            return iv;
+        }
+
+        public void CreateIVKey(string gmail, byte[] iv)
+        {
+            var keys = database.GetCollection<IVAesKey>("IVAesKey");
+
+            var filter = Builders<IVAesKey>.Filter.Eq(x => x.Gmail, gmail);
+            var existingKey = keys.Find(filter).FirstOrDefault();
+
+            if (existingKey != null)
+            {
+                var update = Builders<IVAesKey>.Update.Set(x => x.IVKey, iv);
+                keys.UpdateOne(filter, update);
+            }
+            else
+            {
+                var key = new IVAesKey()
+                {
+                    Gmail = gmail,
+                    IVKey = iv
+                };
+                keys.InsertOne(key);
+            }
+        }
+
         public string GetJwtSecretKey()
         {
             var keys = database.GetCollection<JwtSecretKey>("JwtSecretKey");

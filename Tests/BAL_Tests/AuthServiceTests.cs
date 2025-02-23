@@ -47,7 +47,7 @@ namespace Tests.BAL_Tests
         [Test]
         public void Test_Register_Failure()
         {
-            Assert.Throws<ArgumentException>(
+            Assert.Throws<ArgumentNullException>(
                 () => _service.Registration(null!, null!, null!)
             );
             Assert.Throws<ArgumentException>(
@@ -64,7 +64,7 @@ namespace Tests.BAL_Tests
         [Test]
         public void Test_Authentication_Success()
         {
-            var email = "admin@gmail.com";
+            var email = "admin63@gmail.com";
             var password = "admin";
             var isUserExist = _service.Authentication(email, password);
 

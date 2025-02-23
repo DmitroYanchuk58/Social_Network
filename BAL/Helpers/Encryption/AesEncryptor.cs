@@ -1,11 +1,13 @@
-﻿using System.Security.Cryptography;
+﻿using BAL.Services;
+using DAL.Entities.MongoDbEntities;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace BAL.Helpers.Interfaces
 {
     public static class AesEncryptor
     {
-        public static string Decrypt(string ciphertext)
+        public static string Decrypt(string ciphertext, byte[] iv)
         {
             if (string.IsNullOrEmpty(ciphertext))
             {
@@ -13,12 +15,11 @@ namespace BAL.Helpers.Interfaces
             }
 
             byte[] Key = Encoding.UTF8.GetBytes("Dima_Yanchuk_Key");
-            byte[] IV = Encoding.UTF8.GetBytes("Social_NetworkIV");
 
             using (var aes = Aes.Create())
             {
                 aes.Key = Key;
-                aes.IV = IV;
+                aes.IV = iv;
 
                 var decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
                 byte[] encryptedBytes = Convert.FromBase64String(ciphertext);
@@ -28,7 +29,7 @@ namespace BAL.Helpers.Interfaces
             }
         }
 
-        public static string Encrypt(string plaintext)
+        public static (string, byte[]) Encrypt(string plaintext)
         {
             if (string.IsNullOrEmpty(plaintext))
             {
@@ -36,18 +37,19 @@ namespace BAL.Helpers.Interfaces
             }
 
             byte[] Key = Encoding.UTF8.GetBytes("Dima_Yanchuk_Key");
-            byte[] IV = Encoding.UTF8.GetBytes("Social_NetworkIV");
 
             using (var aes = Aes.Create())
             {
                 aes.Key = Key;
-                aes.IV = IV;
+                aes.GenerateIV();
 
                 var encryptor = aes.CreateEncryptor(aes.Key, aes.IV);
                 byte[] plainBytes = Encoding.UTF8.GetBytes(plaintext);
                 byte[] encryptedBytes = encryptor.TransformFinalBlock(plainBytes, 0, plainBytes.Length);
 
-                return Convert.ToBase64String(encryptedBytes);
+                var encryptedText = Convert.ToBase64String(encryptedBytes);
+
+                return (encryptedText, aes.IV);
             }
         }
     }

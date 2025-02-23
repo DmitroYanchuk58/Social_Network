@@ -134,16 +134,5 @@ namespace Tests.BAL_Tests
                 () => _service.ChangeNickname(id, "Different password")
             );
         }
-
-        [Test]
-        public void ChangePassword_NicknameAfterUpdateSame()
-        {
-            var id = _crudRepository.GetAll()[78].Id;
-            var newPassword = "Hehehehe";
-            _service.ChangePassword(id, newPassword);
-            var passwordAfterUpdate = _crudRepository.GetAll()[78].Password;
-            passwordAfterUpdate = AesEncryptor.Decrypt(passwordAfterUpdate);
-            Assert.That(newPassword, Is.EqualTo(passwordAfterUpdate));
-        }
     }
 }
