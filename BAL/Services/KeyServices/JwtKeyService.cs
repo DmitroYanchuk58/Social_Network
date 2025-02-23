@@ -14,10 +14,15 @@ namespace BAL.Services
 
         public JwtKeyService()
         {
-            var username = "Dima";
-            var password = "55555";
-            var connectionString = $"mongodb+srv://{username}:{password}@cluster0.7hu6y.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
-            dbContext = new(connectionString);
+            dbContext = new("Dima", GetPassword());
+        }
+
+        private static string GetPassword()
+        {
+            byte[] iv = { 14, 21, 178, 218, 19, 157, 203, 202, 112, 11, 182, 76, 112, 206, 79, 194 };
+            var encryptedPassword = "1iG5LucztaQtZSgUt1GmXw==";
+            var password = AesEncryptor.Decrypt(encryptedPassword, iv);
+            return password;
         }
 
         public string GetJwtSecretKey()
